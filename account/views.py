@@ -46,15 +46,18 @@ def get_token(request):
         return JsonResponse({"fail":"please use post method"})
 
 def verify_token(request):
-    if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
+    try:
+        headers = request.headers.get("Authorization")
         try:
-            body = json.loads(body_unicode)
-        except:
-            return JsonResponse({"fail":"please use json"})
-        try:
-            token = body["Authorization"]
-            payload = jwt.decode(token, secret, algorithm='HS256')
-            return JsonResponse({"username":payload["username"],"password":payload["password"]})
+            payload = jwt.decode(headers, secret, algorithms='HS256')
+            year, month, date = get_date()
+            d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
+            d2 = datetime.date(year, month, date)
+            if abs(d2-d1).days > 15:
+                return JsonResponse({"state":"authorization exceed the time limit"})
+            return JsonResponse({"state":"authorization pass"})
         except:
             return JsonResponse({"fail":"something went wrong"})
+    except:
+        return JsonResponse({"fail":"jwt authorization failed"})
+    
