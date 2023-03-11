@@ -36,12 +36,12 @@ def get_token(request):
             body = json.loads(body_unicode)
         except:
             return JsonResponse({"fail":"please use json"})
-        result = jwt_search(body["username"],body["password"])
+        result = jwt_search(body["account"],body["password"])
         if result != 'ok':
-            return JsonResponse({"fail":result})
+            return JsonResponse({"success":False,"message":result,"account":body["account"]})
         year, month, date = get_date()
-        token = jwt.encode({"username":body["username"],"password":body["password"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
-        return JsonResponse({"success":True,"message":token,"account":body["username"]})
+        token = jwt.encode({"username":body["account"],"password":body["password"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
+        return JsonResponse({"success":True,"message":token,"account":body["account"]})
     else:
         return JsonResponse({"fail":"please use post method"})
 
