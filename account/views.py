@@ -7,7 +7,7 @@ from rest_framework import viewsets,status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse
 
 import json,jwt,datetime
 
@@ -41,7 +41,7 @@ def get_token(request):
             return JsonResponse({"fail":state})
         year, month, date = get_date()
         token = jwt.encode({"username":body["username"],"password":body["password"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
-        return JsonResponse({'token':token})
+        return JsonResponse({"success":True,"message":token,"account":body["username"]})
     else:
         return JsonResponse({"fail":"please use post method"})
 
@@ -54,10 +54,10 @@ def verify_token(request):
             d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
             d2 = datetime.date(year, month, date)
             if abs(d2-d1).days > 15:
-                return JsonResponse({"state":"authorization exceed the time limit"})
-            return JsonResponse({"state":"authorization pass"})
+                return JsonResponse({"success":False,"account":payload["username"]})
+            return JsonResponse({"success":True,"account":payload["username"]})
         except:
-            return JsonResponse({"fail":"something went wrong"})
+            return JsonResponse({"success":False,"account":payload["username"]})
     except:
-        return JsonResponse({"fail":"jwt authorization failed"})
-    
+        return JsonResponse({"success":False,"account":payload["username"]})
+# JWT token finish

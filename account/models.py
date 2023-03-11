@@ -29,8 +29,8 @@ def search_by_account_raw(**kwargs):
 def jwtsearch(account,password):
     result = Userfile.objects.raw(f'SELECT * FROM Userfile WHERE Account = "{account}"')
     if not result:
-        return "account does not exist"
+        return "尚未註冊"
     for r in result:
         if r.Password == password:
             return "ok"
-    return "password does not match"
+    return "登入失敗"
