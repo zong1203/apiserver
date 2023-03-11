@@ -1,6 +1,6 @@
 # Create your views here.
 from account.models import Userfile
-from account.models import search_by_account_raw,jwtsearch
+from account.models import search_by_account_raw,jwt_search,account_search
 from account.serializers import UserfileSerializer
 
 from rest_framework import viewsets,status
@@ -36,9 +36,9 @@ def get_token(request):
             body = json.loads(body_unicode)
         except:
             return JsonResponse({"fail":"please use json"})
-        state = jwtsearch(body["username"],body["password"])
-        if state != 'ok':
-            return JsonResponse({"fail":state})
+        result = jwt_search(body["username"],body["password"])
+        if result != 'ok':
+            return JsonResponse({"fail":result})
         year, month, date = get_date()
         token = jwt.encode({"username":body["username"],"password":body["password"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
         return JsonResponse({"success":True,"message":token,"account":body["username"]})
@@ -61,3 +61,28 @@ def verify_token(request):
     except:
         return JsonResponse({"success":False,"account":payload["username"]})
 # JWT token finish
+# Sign up
+def sign_up(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        try:
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse({"fail":"please use json"})
+        result = account_search(body["account"])
+        if result == "帳號已經被註冊":
+            return JsonResponse({"success":False,"message":result})
+        Userfile.objects.create(Account = body["account"],
+                                Password = body["password"],
+                                Name = body["nickname"],
+                                Email = body["mail"],
+                                Phonenumber = body["phone"],
+                                StudentID = "",
+                                Introduction = "",
+                                Favorite = "",
+                                Profliephoto = "")
+        result = account_search(body["account"])
+        if result == "帳號已經被註冊":
+            return JsonResponse({"success":True,"message":"註冊成功"})
+        return JsonResponse({"success":False,"message":"註冊失敗"})
+# Sign up finish

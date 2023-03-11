@@ -26,7 +26,7 @@ def search_by_account_raw(**kwargs):
         result = Userfile.objects.raw('SELECT * FROM Userfile')
     return result
 
-def jwtsearch(account,password):
+def jwt_search(account,password):
     result = Userfile.objects.raw(f'SELECT * FROM Userfile WHERE Account = "{account}"')
     if not result:
         return "尚未註冊"
@@ -34,3 +34,9 @@ def jwtsearch(account,password):
         if r.Password == password:
             return "ok"
     return "登入失敗"
+
+def account_search(account):
+    result = Userfile.objects.raw(f'SELECT * FROM Userfile WHERE Account = "{account}"')
+    if not result:
+        return "ok"
+    return "帳號已經被註冊"
