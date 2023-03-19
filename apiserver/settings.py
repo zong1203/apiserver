@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_mongoengine',
     'account',
+    'picture',
     'rest_framework_simplejwt'
 ]
 
