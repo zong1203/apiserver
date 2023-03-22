@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 from account import views as account_views
-from picture import views as picture_views
 
 
 router = DefaultRouter()
@@ -25,8 +24,6 @@ router.register('userfile', account_views.UserfileViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/login/', account_views.get_token),
-    path('api/token_verify/', account_views.verify_token),
-    path('api/signup/', account_views.sign_up),
-    path('get_picture', picture_views.read_img),
+    path('api/', include('account.urls')),
+    path('image/', include('picture.urls')),
 ]
