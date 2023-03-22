@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-import os
+from django.http import HttpResponse,JsonResponse
+import os,json,base64
 # Create your views here.
 def get_image(request):
     try:
@@ -16,3 +16,16 @@ def get_image(request):
 def upload_image(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
+        try:
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse({"fail":"please use json"})
+        if (body["type"] != "profile") and (body["type"] != "commodity"):
+            return HttpResponse("type error")
+        base64file = base64.b64decode(bytes(body["base64"], 'utf-8'))
+        img_file = open(f'./picture/{body["type"]}/image.jpg', 'wb')
+        img_file.write(base64file)
+        img_file.close()
+        return HttpResponse("ok")
+    return HttpResponse('some thing went wrong')
+    
