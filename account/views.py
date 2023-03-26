@@ -53,7 +53,7 @@ def verify_token(request):
             year, month, date = get_date()
             d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
             d2 = datetime.date(year, month, date)
-            if abs(d2-d1).days > 15:
+            if abs(d2-d1).days > 10:
                 return JsonResponse({"success":False,"account":payload["username"]})
             return JsonResponse({"success":True,"account":payload["username"]})
         except:
