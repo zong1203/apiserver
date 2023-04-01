@@ -11,7 +11,7 @@ class Userfile(models.Model):
     StudentID = models.CharField(max_length=10)
     Introduction = models.TextField()
     Favorite = models.TextField()
-    Profliephoto = models.CharField(max_length=50,  default='', verbose_name='address')
+    Profliephoto = models.CharField(max_length=50,  default='')
 
 
 

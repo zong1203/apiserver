@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 from account import views as account_views
-
+from commodity import views as commodity_views
 
 router = DefaultRouter()
 router.register('userfile', account_views.UserfileViewSet)
+router.register('commodity', commodity_views.CommodityViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/', include('account.urls')),
     path('image/', include('picture.urls')),
+    path('commodity/', include('commodity.urls')),
 ]

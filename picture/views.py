@@ -1,12 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-import os,json,base64,datetime,random
+import os,json,base64,uuid
 # Create your views here.
 
-def randnum():
-    now = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=8)))
-    r = now.hour*10000000+now.minute*100000+now.second*1000+now.microsecond%1000
-    return r*random.randrange(1,99999999)%1000000000000
+
 def get_image(request):
     try:
         type_name, picture_name = request.GET['type'], request.GET['picture_name']
@@ -28,9 +25,17 @@ def upload_image(request):
         if (body["type"] != "profile") and (body["type"] != "commodity"):
             return HttpResponse("type error")
         base64file = base64.b64decode(bytes(body["base64"], 'utf-8'))
-        img_file = open(f'./picture/{body["type"]}/{randnum()}.jpg', 'wb')
+        img_file = open(f'./picture/{body["type"]}/{uuid.uuid1()}.jpg', 'wb')
         img_file.write(base64file)
         img_file.close()
         return HttpResponse("ok")
     return HttpResponse('some thing went wrong')
+
+def upload_commodity_image(base64data):
+    name = uuid.uuid1()
+    base64file = base64.b64decode(bytes(base64data, 'utf-8'))
+    img_file = open(f'./picture/commodity/{name}.jpg', 'wb')
+    img_file.write(base64file)
+    img_file.close()
+    return name
     

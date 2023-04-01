@@ -1,3 +1,8 @@
-import uuid
+test = {
+    1:'one',
+    2:'two',
+    3:'three',
+    4:'four'
+}
 
-print(str(uuid.uuid3(uuid.NAMESPACE_DNS, 'pinzong'+'1203')))
+print(1 and 2 and 5 in test)

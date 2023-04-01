@@ -13,6 +13,15 @@ class Commodity(models.Model):
     Price = models.CharField(max_length=5)
     Amount = models.CharField(max_length=5)
     Position = models.TextField()
+    Account = models.CharField(max_length=20,  default='')
 
     class Meta:
         db_table = "Commodity"
+
+def search_by_commodity_raw(**kwargs):
+    commodity = kwargs.get('commodity')
+    if commodity:
+        result = Commodity.objects.raw(f'SELECT * FROM Commodity WHERE Name = {commodity}')
+    else:
+        result = Commodity.objects.raw('SELECT * FROM Commodity')
+    return result

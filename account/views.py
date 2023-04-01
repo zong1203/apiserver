@@ -60,6 +60,15 @@ def verify_token(request):
             return JsonResponse({"success":False,"account":payload["username"]})
     except:
         return JsonResponse({"success":False,"account":payload["username"]})
+
+def auth(token):
+    payload = jwt.decode(token, secret, algorithms='HS256')
+    year, month, date = get_date()
+    d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
+    d2 = datetime.date(year, month, date)
+    if abs(d2-d1).days > 10:
+        return False,payload["username"]
+    return True,payload["username"]
 # JWT token finish
 # Sign up
 def sign_up(request):
@@ -72,17 +81,23 @@ def sign_up(request):
         result = account_search(body["account"])
         if result == "帳號已經被註冊":
             return JsonResponse({"success":False,"message":result})
-        Userfile.objects.create(Account = body["account"],
-                                Password = body["password"],
-                                Name = body["nickname"],
-                                Email = body["mail"],
-                                Phonenumber = body["phone"],
-                                StudentID = "",
-                                Introduction = "",
-                                Favorite = "",
-                                Profliephoto = "")
-        result = account_search(body["account"])
-        if result == "帳號已經被註冊":
-            return JsonResponse({"success":True,"message":"註冊成功"})
-        return JsonResponse({"success":False,"message":"註冊失敗"})
+        print(body)
+        if "account" in body and "password" in body and "nickname" in body and "mail" in body and "phone" in body:
+            Userfile.objects.create(
+                Account = body["account"],
+                Password = body["password"],
+                Name = body["nickname"],
+                Email = body["mail"],
+                Phonenumber = body["phone"],
+                StudentID = "",
+                Introduction = "",
+                Favorite = "",
+                Profliephoto = ""
+            )
+            result = account_search(body["account"])
+            if result == "帳號已經被註冊":
+                return JsonResponse({"success":True,"message":"註冊成功"})
+            return JsonResponse({"success":False,"message":"註冊失敗"})
+        else:
+            return JsonResponse({"success":False,"message":"註冊失敗"})
 # Sign up finish
