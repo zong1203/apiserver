@@ -1,8 +1,5 @@
-test = {
-    1:'one',
-    2:'two',
-    3:'three',
-    4:'four'
-}
+import hashlib
 
-print(1 and 2 and 5 in test)
+data = 'test'
+text = hashlib.sha256(data.encode('utf-8')).hexdigest()
+print(text)

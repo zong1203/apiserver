@@ -9,7 +9,7 @@ from rest_framework.decorators import action
 
 from django.http import JsonResponse
 
-import json,jwt,datetime
+import json,jwt,datetime,hashlib
 
 secret = "zong1203vafnvbiwfjnvbhlifzdv"
 # Create your views here.
@@ -85,7 +85,7 @@ def sign_up(request):
         if "account" in body and "password" in body and "nickname" in body and "mail" in body and "phone" in body:
             Userfile.objects.create(
                 Account = body["account"],
-                Password = body["password"],
+                Password = hashlib.sha256(body["password"].encode('utf-8')).hexdigest(),
                 Name = body["nickname"],
                 Email = body["mail"],
                 Phonenumber = body["phone"],

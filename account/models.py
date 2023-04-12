@@ -1,10 +1,11 @@
 from django.db import models
+import hashlib
 
 # Create your models here.
 
 class Userfile(models.Model):
     Account = models.CharField(max_length=20)
-    Password = models.CharField(max_length=20)
+    Password = models.CharField(max_length=65)
     Name = models.CharField(max_length=20)
     Email = models.CharField(max_length=40)
     Phonenumber = models.CharField(max_length=12,blank=True)
@@ -31,7 +32,7 @@ def jwt_search(account,password):
     if not result:
         return "尚未註冊"
     for r in result:
-        if r.Password == password:
+        if r.Password == hashlib.sha256(password.encode('utf-8')).hexdigest():
             return "ok"
     return "登入失敗"
 
