@@ -107,7 +107,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def search_by_commodity(self, request):
-        account = request.query_params.get('account', None)
-        userfile = search_by_commodity_raw(account=account)
+        commodity = request.query_params.get('commodity', None)
+        userfile = search_by_commodity_raw(commodity=commodity)
         serializer = CommoditySerializer(userfile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
