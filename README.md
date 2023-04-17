@@ -87,3 +87,33 @@
 ```
 
 </details>
+
+### /api/signup/
+
+<details><summary>click me</summary>
+
+- function
+  - Verify the legality of the JWT token, with a validity period of 10 days. As the verification has been performed during acquisition, the existence of the account and password will not be verified here.
+- method
+  - GET
+- Request header
+```json
+Authorization:your jwt token
+```
+- Response body
+```json
+#If the JWT token is within its validity period of 10 days.
+{
+    "success": true,
+    "account": "your account"
+}
+```
+```json
+#If the JWT token has expired or the 'Authorization' field cannot be obtained from the header.
+{
+    "success": false,
+    "account": "your account"
+}
+```
+
+</details>
