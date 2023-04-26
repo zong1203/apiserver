@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 
 from commodity.models import Commodity,search_by_commodity_raw
 from commodity.serializers import CommoditySerializer
-from picture.views import upload_commodity_image
+from picture.views import upload_image
 from account.views import auth
 
 import json
@@ -33,7 +33,7 @@ def upload(request):
         if 'img2' not in body:
             Commodity.objects.create(
                 Launched = True,
-                Img1 = upload_commodity_image(body["img1"]),
+                Img1 = upload_image(body["img1"]),
                 Name = body["name"],
                 Deacription = body["description"],
                 Price = body["price"],
@@ -45,8 +45,8 @@ def upload(request):
         if 'img3' not in body:
             Commodity.objects.create(
                 Launched = True,
-                Img1 = upload_commodity_image(body["img1"]),
-                Img2 = upload_commodity_image(body["img2"]),
+                Img1 = upload_image(body["img1"]),
+                Img2 = upload_image(body["img2"]),
                 Name = body["name"],
                 Deacription = body["description"],
                 Price = body["price"],
@@ -58,9 +58,9 @@ def upload(request):
         if 'img4' not in body:
             Commodity.objects.create(
                 Launched = True,
-                Img1 = upload_commodity_image(body["img1"]),
-                Img2 = upload_commodity_image(body["img2"]),
-                Img3 = upload_commodity_image(body["img3"]),
+                Img1 = upload_image(body["img1"]),
+                Img2 = upload_image(body["img2"]),
+                Img3 = upload_image(body["img3"]),
                 Name = body["name"],
                 Deacription = body["description"],
                 Price = body["price"],
@@ -72,10 +72,10 @@ def upload(request):
         if 'img5' not in body:
             Commodity.objects.create(
                 Launched = True,
-                Img1 = upload_commodity_image(body["img1"]),
-                Img2 = upload_commodity_image(body["img2"]),
-                Img3 = upload_commodity_image(body["img3"]),
-                Img4 = upload_commodity_image(body["img4"]),
+                Img1 = upload_image(body["img1"]),
+                Img2 = upload_image(body["img2"]),
+                Img3 = upload_image(body["img3"]),
+                Img4 = upload_image(body["img4"]),
                 Name = body["name"],
                 Deacription = body["description"],
                 Price = body["price"],
@@ -86,11 +86,11 @@ def upload(request):
             return JsonResponse({"success":True,"message":"成功上傳商品"})
         Commodity.objects.create(
             Launched = True,
-            Img1 = upload_commodity_image(body["img1"]),
-            Img2 = upload_commodity_image(body["img2"]),
-            Img3 = upload_commodity_image(body["img3"]),
-            Img4 = upload_commodity_image(body["img4"]),
-            Img5 = upload_commodity_image(body["img5"]),
+            Img1 = upload_image(body["img1"]),
+            Img2 = upload_image(body["img2"]),
+            Img3 = upload_image(body["img3"]),
+            Img4 = upload_image(body["img4"]),
+            Img5 = upload_image(body["img5"]),
             Name = body["name"],
             Deacription = body["description"],
             Price = body["price"],

@@ -1,5 +1,6 @@
-import hashlib
+import datetime
 
-data = 'test'
-text = hashlib.sha256(data.encode('utf-8')).hexdigest()
-print(text)
+def test(t = 1):
+    print(t)
+
+test(2)

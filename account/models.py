@@ -22,8 +22,8 @@ class Chathistory(models.Model):
     Receiver = models.CharField(max_length=20)
     Type = models.CharField(max_length=10)
     Content = models.CharField(max_length=255)
-    Date = models.CharField(max_length=2)
-    Time = models.CharField(max_length=2)
+    Date = models.CharField(max_length=10)
+    Time = models.CharField(max_length=10)
 
     class Meta:
         db_table = "ChatHistory"

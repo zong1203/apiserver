@@ -1,7 +1,9 @@
 # Create your views here.
-from account.models import Userfile
+from account.models import Userfile,Chathistory
 from account.models import search_by_account_raw,jwt_search,account_search
 from account.serializers import UserfileSerializer
+
+from picture.views import upload_image
 
 from rest_framework import viewsets,status
 from rest_framework.response import Response
@@ -101,3 +103,26 @@ def sign_up(request):
         else:
             return JsonResponse({"success":False,"message":"註冊失敗"})
 # Sign up finish
+#======================================================================================================
+#chathistory
+def new_message(sender,receiver,type,content):
+    if type == "text":
+        now = datetime.datetime.now()
+
+        Chathistory.objects.create(
+            Sender = sender,
+            Receiver = receiver,
+            Type = type,
+            Content = content,
+            Date = now.strftime('%Y/%m/%d'),
+            Time = now.strftime('%H:%M:%S')
+        )
+    elif type == "picture":
+        Chathistory.objects.create(
+            Sender = sender,
+            Receiver = receiver,
+            Type = type,
+            Content = upload_image(content),
+            Date = now.strftime('%Y/%m/%d'),
+            Time = now.strftime('%H:%M:%S')
+        )

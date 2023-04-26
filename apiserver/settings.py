@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_mongoengine',
+    'channels',
     'account',
     'picture',
     'commodity',
-    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
