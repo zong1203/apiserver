@@ -191,13 +191,13 @@ None
 
 </details>
 
-### /commodity/upload/
+### /api/commodity/commodity_CRUD/
 
 <details><summary>click me</summary>
 
 - function
-  - This API is used to upload product information. The request body must include the "Img1" field, and "Img2" to "Img5" are optional. In addition, the "Authorization" header must be included in the request header to store your JWT token.
-  - Because this API's implementation is different from the previous search function, it is not possible to add "api/" at the beginning of the URL. We are currently looking for a solution to this issue.
+  - 這支api用來對商品做CRUD,header內必須加上jwt token.
+  - 請注意,搜尋和主頁大量獲取商品資訊勿使用此api
 - method
   - POST
 - Request header
@@ -212,11 +212,7 @@ Authorization:your jwt token
     "price":"your price",
     "amount":"commodity amount",
     "position":"where is your commodity",
-    "img1":"the field is necessary (use base64 to store)",
-    "img2":"optional",
-    "img3":"optional",
-    "img4":"optional",
-    "img5":"optional"
+    "image":["至少一張圖片","可選","可選","可選","最多五張圖片"]
 }
 ```
 - Response body

@@ -30,7 +30,7 @@ def upload_test_image(request):
     return HttpResponse('some thing went wrong')
 
 def upload_image(base64data):
-    name = uuid.uuid1()
+    name = str(uuid.uuid1())
     base64file = base64.b64decode(bytes(base64data, 'utf-8'))
     img_file = open(f'./picture/picture/{name}.jpg', 'wb')
     img_file.write(base64file)
