@@ -1,0 +1,1 @@
+nohup python -u manage.py runserver > server.log &

@@ -20,8 +20,14 @@ class Commodity(models.Model):
 
 def search_by_commodity_raw(**kwargs):
     commodity = kwargs.get('commodity')
+    commodity_id = kwargs.get('commodity_id')
+    account = kwargs.get('account')
     if commodity:
         result = Commodity.objects.raw(f'SELECT * FROM Commodity WHERE Name = "{commodity}"')
+    elif commodity_id:
+        result = Commodity.objects.raw(f'SELECT * FROM Commodity WHERE id = "{commodity_id}"')
+    elif account:
+        result = Commodity.objects.raw(f'SELECT * FROM Commodity WHERE Account = "{account}"')
     else:
         result = Commodity.objects.raw('SELECT * FROM Commodity')
     return result

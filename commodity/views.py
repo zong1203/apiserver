@@ -11,7 +11,7 @@ from commodity.serializers import CommoditySerializer
 from picture.views import upload_image
 from account.views import auth
 
-import json
+import json,os
 
 # Create your views here.
 
@@ -21,30 +21,48 @@ class CommodityViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def search_by_commodity(self, request):
-        commodity = request.query_params.get('commodity', None)
-        userfile = search_by_commodity_raw(commodity=commodity)
-        serializer = CommoditySerializer(userfile, many=True)
+        commodity_name = request.query_params.get('commodity', None)
+        commodity = search_by_commodity_raw(commodity=commodity_name)
+        serializer = CommoditySerializer(commodity, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def my_commodity(self, request):
+        try:
+            headers = request.headers.get("Authorization")
+        except:
+            return JsonResponse({"success":False,"message":"please authorizate"})
+        state, account = auth(headers)
+        if state == False:
+            return JsonResponse({"success":False,"message":"json time limit exceeded"})
+        commodity = search_by_commodity_raw(account=account)
+        serializer = CommoditySerializer(commodity, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get','post','put','delete'])
     def commodity_CRUD(self, request):
-        # if request.method == 'GET':
-        #     try:
-        #         headers = request.headers.get("Authorization")
-        #     except:
-        #         return JsonResponse({"success":False,"message":"please authorizate"})
-        #     state, account = auth(headers)
-        #     if state == False:
-        #         return JsonResponse({"success":False,"message":"json time limit exceeded"})
-            
+        try:
+            headers = request.headers.get("Authorization")
+        except:
+            return JsonResponse({"success":False,"message":"please authorizate"})
+        state, account = auth(headers)
+        if state == False:
+            return JsonResponse({"success":False,"message":"json time limit exceeded"})
+        # R
+        if request.method == 'GET':
+            commodity_id = request.query_params.get('id', None)
+            if not commodity_id:
+                return JsonResponse({"success":False,"message":"Please add parameters to the URL."})
+            commodity = search_by_commodity_raw(commodity_id=commodity_id)
+            if not commodity:
+                return JsonResponse({"success":False,"message":"can't find commodity with this id"})
+            if account != commodity[0].Account:
+                return JsonResponse({"success":False,"message":"this commodity is not yours"})
+            serializer = CommoditySerializer(commodity, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # C
         if request.method == 'POST':
-            try:
-                headers = request.headers.get("Authorization")
-            except:
-                return JsonResponse({"success":False,"message":"please authorizate"})
-            state, account = auth(headers)
-            if state == False:
-                return JsonResponse({"success":False,"message":"json time limit exceeded"})
             body_unicode = request.body.decode('utf-8')
             try:
                 body = json.loads(body_unicode)
@@ -56,17 +74,54 @@ class CommodityViewSet(viewsets.ModelViewSet):
             for i, j in enumerate(body["image"]):
                 img[i] = upload_image(j)
             Commodity.objects.create(
-                Launched = True,
-                Img1 = img[0],
-                Img2 = img[1],
-                Img3 = img[2],
-                Img4 = img[3],
-                Img5 = img[4],
-                Name = body["name"],
-                Deacription = body["description"],
-                Price = body["price"],
-                Amount = body["amount"],
-                Position = body["position"],
-                Account = account
+                Launched = True,Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],Img5 = img[4],
+                Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Amount = body["amount"],Position = body["position"],Account = account
             )
             return JsonResponse({"success":True,"message":"ok"})
+        
+        # U
+        if request.method == 'PUT':
+            commodity_id = request.query_params.get('id', None)
+            commodity = search_by_commodity_raw(commodity_id=commodity_id)
+            if not commodity:
+                return JsonResponse({"success":False,"message":"can't find commodity with this id"})
+            if account != commodity[0].Account:
+                return JsonResponse({"success":False,"message":"this commodity is not yours"})
+            body_unicode = request.body.decode('utf-8')
+            try:
+                body = json.loads(body_unicode)
+            except:
+                return JsonResponse({"fail":"please use json"})
+            if 'name' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body:
+                return JsonResponse({"success":False,"message":"缺少必要資料"})
+            img = [commodity[0].Img1,commodity[0].Img2,commodity[0].Img3,commodity[0].Img4,commodity[0].Img5]
+            for i in img:
+                if (i not in body["remain_image"]) and i != "":
+                    os.remove(f'./picture/picture/{i}')
+            img = body["remain_image"]
+            for i in body["image"]:
+                img.append(upload_image(i))
+            while len(img) < 5:
+                img.append("")
+            Commodity.objects.filter(id=int(commodity_id)).update(
+                Launched = True,Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],Img5 = img[4],
+                Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Amount = body["amount"],Position = body["position"],Account = account
+            )
+            return JsonResponse({"success":True,"message":"ok"})
+            
+        # D
+        if request.method == 'DELETE':
+            commodity_id = request.query_params.get('id', None)
+            commodity = search_by_commodity_raw(commodity_id=commodity_id)
+            if not commodity:
+                return JsonResponse({"success":False,"message":"can't find commodity with this id"})
+            if account != commodity[0].Account:
+                return JsonResponse({"success":False,"message":"this commodity is not yours"})
+            img = [commodity[0].Img1,commodity[0].Img2,commodity[0].Img3,commodity[0].Img4,commodity[0].Img5]
+            for i in img:
+                if i:
+                    os.remove(f'./picture/picture/{i}')
+            commodity[0].delete()
+            return JsonResponse({"success":True})

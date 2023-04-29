@@ -1,7 +1,4 @@
-import datetime
+a = ["a","b","c"]
 
-test = ["A","B","C","D","E"]
-for i,j in enumerate(test):
-    print(f"{i},{j}")
-    test[i] = ''
-print(test)
+for i in range(0,0):
+    print(test)
