@@ -188,6 +188,7 @@ None
     "Account": "Who uploaded this product"
 }
 ```
+</details>
 
 ### /api/commodity/search_by_commodity/
 

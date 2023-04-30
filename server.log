@@ -1,0 +1,42 @@
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+April 30, 2023 - 15:39:20
+Django version 4.1.2, using settings 'apiserver.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+[30/Apr/2023 15:39:45] "POST /api/login/ HTTP/1.0" 200 84
+Not Found: /
+[30/Apr/2023 15:42:37] "GET / HTTP/1.0" 404 2486
+Not Found: /
+[30/Apr/2023 15:50:20] "GET / HTTP/1.0" 404 2489
+Not Found: /
+[30/Apr/2023 16:08:44] "GET / HTTP/1.0" 404 2486
+{'account': 'kokoro123', 'password': 'kokoro123', 'mail': 'kokoro123', 'phone': 'kokoro123'}
+[30/Apr/2023 16:19:08] "POST /api/signup/ HTTP/1.0" 200 57
+{'account': 'kokoro123', 'password': 'kokoro123', 'mail': 'kokoro123', 'phone': 'kokoro123'}
+[30/Apr/2023 16:19:11] "POST /api/signup/ HTTP/1.0" 200 57
+[30/Apr/2023 16:19:47] "GET /api/userfile/ HTTP/1.0" 200 12563
+{'account': 'kokoro123', 'password': 'kokoro123', 'nickname': 'kokoro123', 'mail': 'kokoro123', 'phone': 'kokoro123'}
+[30/Apr/2023 16:20:21] "POST /api/signup/ HTTP/1.0" 200 56
+[30/Apr/2023 16:20:55] "POST /api/login/ HTTP/1.0" 200 243
+[30/Apr/2023 16:21:14] "GET /api/userfile/ HTTP/1.0" 200 13103
+[30/Apr/2023 16:22:28] "GET /api/token_verify/ HTTP/1.0" 200 41
+[30/Apr/2023 16:22:36] "GET /api/token_verify/ HTTP/1.0" 200 41
+[30/Apr/2023 16:22:37] "GET /api/token_verify/ HTTP/1.0" 200 41
+Not Found: /
+[30/Apr/2023 16:27:38] "GET / HTTP/1.0" 404 2486
+[30/Apr/2023 16:35:26] "GET /api/userfile/ HTTP/1.0" 200 13103
+Not Found: /
+[30/Apr/2023 16:40:28] "GET / HTTP/1.0" 404 2486
+Not Found: /favicon.ico
+[30/Apr/2023 16:40:29] "GET /favicon.ico HTTP/1.0" 404 2537
+Not Found: /
+[30/Apr/2023 17:07:37] "GET / HTTP/1.0" 404 2486
+Not Found: /favicon.ico
+[30/Apr/2023 17:07:45] "GET /favicon.ico HTTP/1.0" 404 2537
+Not Found: /
+[30/Apr/2023 17:10:53] "GET / HTTP/1.0" 404 2489
+Not Found: /
+[30/Apr/2023 17:45:23] "GET / HTTP/1.0" 404 2489

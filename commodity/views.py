@@ -39,6 +39,34 @@ class CommodityViewSet(viewsets.ModelViewSet):
         serializer = CommoditySerializer(commodity, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['post'])
+    def launch(self, request):
+        try:
+            headers = request.headers.get("Authorization")
+        except:
+            return JsonResponse({"success":False,"message":"please authorizate"})
+        state, account = auth(headers)
+        if state == False:
+            return JsonResponse({"success":False,"message":"json time limit exceeded"})
+        commodity_id = request.query_params.get('id', None)
+        commodity = search_by_commodity_raw(commodity_id=commodity_id)
+        if not commodity:
+            return JsonResponse({"success":False,"message":"can't find commodity with this id"})
+        if account != commodity[0].Account:
+            return JsonResponse({"success":False,"message":"this commodity is not yours"})
+        try:
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse({"fail":"please use json"})
+        try:
+            launched = body["launched"]
+        except:
+            return JsonResponse({"fail":"can't find 'launched' in body"})
+        Commodity.objects.filter(id=int(commodity_id)).update(Launched = launched)
+        return JsonResponse({"success":True,"message":"ok"})
+        
+    
     @action(detail=False, methods=['get','post','put','delete'])
     def commodity_CRUD(self, request):
         try:
