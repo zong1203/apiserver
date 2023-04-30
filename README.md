@@ -162,7 +162,7 @@ ___
 <details><summary>click me</summary>
 
 - function
-  - 取得這個帳號的所有商品,需使用jwt需使用jwt
+  - 取得這個帳號的所有商品,需使用jwt
 - method
   - GET
 - Request header
