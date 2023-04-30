@@ -40,3 +40,7 @@ Not Found: /
 [30/Apr/2023 17:10:53] "GET / HTTP/1.0" 404 2489
 Not Found: /
 [30/Apr/2023 17:45:23] "GET / HTTP/1.0" 404 2489
+Not Found: /
+[30/Apr/2023 18:20:11] "GET / HTTP/1.0" 404 2489
+Not Found: /HNAP1/
+[30/Apr/2023 18:20:11] "POST /HNAP1/ HTTP/1.0" 404 2526

@@ -323,8 +323,8 @@ Authorization:your jwt token
     "price":"your price",
     "amount":"commodity amount",
     "position":"where is your commodity",
-    "image":["要留下的圖片名稱,請注意不要輸入不存在的檔名","image和remain_image最多總和只能五張圖片","多餘的會從remain_image的最後面開始刪掉"],
-    "remain_image":["至少一張圖片","可選","可選","可選","最多五張圖片"]
+    "remain_image":["要留下的圖片名稱,請注意不要輸入不存在的檔名","image和remain_image最多總和只能五張圖片","多餘的會從remain_image的最後面開始刪掉"],
+    "image":["至少一張圖片","可選","可選","可選","最多五張圖片"]
 }
 ```
 - Response body
