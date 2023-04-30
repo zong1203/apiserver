@@ -311,6 +311,7 @@ Authorization:your jwt token
 }
 ```
 #### PUT
+- 網址列的id就是要變更的商品
 - Request header
 ```json
 Authorization:your jwt token
