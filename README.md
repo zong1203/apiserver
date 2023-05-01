@@ -190,6 +190,48 @@ None
 ```
 </details>
 
+### /api/commodity/launch/
+
+<details><summary>click me</summary>
+
+- function
+  - 更改商品上下架狀態,需使用jwt,並且在網址列加上目標商品的id,格式為"/api/commodity/launch/?id={商品id}"
+- method
+  - POST
+- Request header
+```json
+Authorization:your jwt token
+```
+- Request body
+```json
+{
+  "launched": launch state
+}
+```
+- Response body
+```json
+#成功
+{
+  "success": true,
+  "message": "ok"
+}
+```
+```json
+#找不到商品
+{
+  "success": false,
+  "message": "can't find commodity with this id"
+}
+```
+```json
+#非商品擁有者
+{
+  "success": false,
+  "message": "this commodity is not yours"
+}
+```
+</details>
+
 ### /api/commodity/search_by_commodity/
 
 <details><summary>click me</summary>
@@ -288,6 +330,7 @@ Authorization:your jwt token
 ```json
 {
     "name":"your commodity name",
+    "launched":"launched state",
     "description":"description",
     "price":"your price",
     "amount":"commodity amount",

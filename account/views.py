@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from django.http import JsonResponse
+from django.shortcuts import render
 
 import json,jwt,datetime,hashlib
 
@@ -26,6 +27,7 @@ class UserfileViewSet(viewsets.ModelViewSet):
         serializer = UserfileSerializer(userfile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+
 # JWT token
 def get_date():
     today = datetime.date.today()
@@ -84,11 +86,11 @@ def sign_up(request):
         if result == "帳號已經被註冊":
             return JsonResponse({"success":False,"message":result})
         print(body)
-        if "account" in body and "password" in body and "nickname" in body and "mail" in body and "phone" in body:
+        if "account" in body and "password" in body and "mail" in body and "phone" in body:
             Userfile.objects.create(
                 Account = body["account"],
                 Password = hashlib.sha256(body["password"].encode('utf-8')).hexdigest(),
-                Name = body["nickname"],
+                Name = body["account"],
                 Email = body["mail"],
                 Phonenumber = body["phone"],
                 StudentID = "",

@@ -35,9 +35,15 @@ class CommodityViewSet(viewsets.ModelViewSet):
         state, account = auth(headers)
         if state == False:
             return JsonResponse({"success":False,"message":"json time limit exceeded"})
-        commodity = search_by_commodity_raw(account=account)
-        serializer = CommoditySerializer(commodity, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        commodity = Commodity.objects.filter(Account=account).values()
+        launched = []
+        unlaunched = []
+        for i in commodity:
+            if i["Launched"]:
+                launched.append(i)
+            else:
+                unlaunched.append(i)
+        return JsonResponse({"success":True,"launched":launched,"unlaunched":unlaunched})
     
     @action(detail=False, methods=['post'])
     def launch(self, request):
@@ -81,13 +87,12 @@ class CommodityViewSet(viewsets.ModelViewSet):
             commodity_id = request.query_params.get('id', None)
             if not commodity_id:
                 return JsonResponse({"success":False,"message":"Please add parameters to the URL."})
-            commodity = search_by_commodity_raw(commodity_id=commodity_id)
+            commodity = Commodity.objects.filter(id=commodity_id).values()
             if not commodity:
                 return JsonResponse({"success":False,"message":"can't find commodity with this id"})
-            if account != commodity[0].Account:
+            if account != commodity[0]["Account"]:
                 return JsonResponse({"success":False,"message":"this commodity is not yours"})
-            serializer = CommoditySerializer(commodity, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return JsonResponse({"success":True,"info":commodity[0]})
         
         # C
         if request.method == 'POST':
@@ -96,14 +101,14 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 body = json.loads(body_unicode)
             except:
                 return JsonResponse({"fail":"please use json"})
-            if 'name' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body or 'image' not in body:
+            if 'name' not in body or 'launched' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body or 'image' not in body:
                 return JsonResponse({"success":False,"message":"缺少必要資料"})
             img = ["","","","",""]
             for i, j in enumerate(body["image"]):
                 img[i] = upload_image(j)
             Commodity.objects.create(
-                Launched = True,Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],Img5 = img[4],
-                Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Launched = body["launched"],Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],
+                Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
             return JsonResponse({"success":True,"message":"ok"})
