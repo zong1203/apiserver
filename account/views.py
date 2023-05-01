@@ -9,7 +9,7 @@ from rest_framework import viewsets,status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render
 
 import json,jwt,datetime,hashlib
@@ -23,11 +23,15 @@ class UserfileViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def search_by_account(self, request):
         account = request.query_params.get('account', None)
-        userfile = search_by_account_raw(account=account)
+        userfile = Userfile.objects.all().values()
         serializer = UserfileSerializer(userfile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-
+def log(request):
+    with open("server.log","r") as f:
+        text = f.readlines()
+        text = [i.rstrip() for i in text]
+        return render(request, 'log.html', {'text': text})
 # JWT token
 def get_date():
     today = datetime.date.today()

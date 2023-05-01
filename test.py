@@ -1,4 +1,2 @@
-with open("./server.log", "r") as f:
-    text = f.readlines()
-    for i in text:
-        print(i)
+for i in (1,2,3,4,5):
+    print(i)

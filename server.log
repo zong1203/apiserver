@@ -2,173 +2,64 @@ Watching for file changes with StatReloader
 Performing system checks...
 
 System check identified no issues (0 silenced).
-April 30, 2023 - 20:34:53
+May 01, 2023 - 17:59:44
 Django version 4.1.2, using settings 'apiserver.settings'
 Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
-[30/Apr/2023 20:35:59] "GET /api/commodity/search_by_commodity/ HTTP/1.0" 200 8464
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.0" 200 3385
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.0" 200 121457
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/css/default.css HTTP/1.0" 200 1152
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/css/prettify.css HTTP/1.0" 200 817
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/ajax-form.js HTTP/1.0" 200 3597
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/jquery-3.5.1.min.js HTTP/1.0" 200 89476
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/csrf.js HTTP/1.0" 200 1719
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/prettify-min.js HTTP/1.0" 200 13632
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.0" 200 39680
-[30/Apr/2023 20:35:59] "GET /static/rest_framework/js/default.js HTTP/1.0" 200 1268
-[30/Apr/2023 20:36:00] "GET /static/rest_framework/img/grid.png HTTP/1.0" 200 1458
+[01/May/2023 17:59:48] "GET /api HTTP/1.0" 301 0
+[01/May/2023 17:59:48] "GET /api/ HTTP/1.0" 200 5443
+[01/May/2023 17:59:49] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.0" 200 3385
+[01/May/2023 17:59:49] "GET /static/rest_framework/css/prettify.css HTTP/1.0" 200 817
+[01/May/2023 17:59:49] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.0" 200 121457
+[01/May/2023 17:59:49] "GET /static/rest_framework/css/default.css HTTP/1.0" 200 1152
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/jquery-3.5.1.min.js HTTP/1.0" 200 89476
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/ajax-form.js HTTP/1.0" 200 3597
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/csrf.js HTTP/1.0" 200 1719
+[01/May/2023 17:59:49] "GET /static/rest_framework/img/grid.png HTTP/1.0" 200 1458
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/default.js HTTP/1.0" 200 1268
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/prettify-min.js HTTP/1.0" 200 13632
+[01/May/2023 17:59:49] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.0" 200 39680
 Not Found: /favicon.ico
-[30/Apr/2023 20:36:00] "GET /favicon.ico HTTP/1.0" 404 2537
-[30/Apr/2023 20:37:30] "GET /api/commodity/search_by_commodity/?commodity=pinzong HTTP/1.0" 200 6617
-[30/Apr/2023 20:37:49] "GET /api/commodity/search_by_commodity/?Account=pinzong HTTP/1.0" 200 8552
-[30/Apr/2023 20:39:17] "GET /api/commodity/search_by_commodity/?commodity=test HTTP/1.0" 200 7911
-Not Found: /image/get/a806d94c-e669-11ed-9f9a-2f817f1cccf8.jpg
-[30/Apr/2023 20:40:05] "GET /image/get/a806d94c-e669-11ed-9f9a-2f817f1cccf8.jpg HTTP/1.0" 404 2865
-'picture_name'
-[30/Apr/2023 20:40:12] "GET /image/get/?=a806d94c-e669-11ed-9f9a-2f817f1cccf8.jpg HTTP/1.0" 200 14
-[30/Apr/2023 20:40:30] "GET /image/get/?picture_name=a806d94c-e669-11ed-9f9a-2f817f1cccf8.jpg HTTP/1.0" 200 277419
-Not Found: /就能用了
-[30/Apr/2023 20:52:09] "GET /%E5%B0%B1%E8%83%BD%E7%94%A8%E4%BA%86 HTTP/1.0" 404 2564
+[01/May/2023 17:59:49] "GET /favicon.ico HTTP/1.0" 404 2537
+[01/May/2023 17:59:56] "GET /api/log HTTP/1.0" 200 2609
+[01/May/2023 18:00:00] "GET /api/log HTTP/1.0" 200 2705
+[01/May/2023 18:00:00] "GET /api/log HTTP/1.0" 200 2801
+[01/May/2023 18:00:00] "GET /api/log HTTP/1.0" 200 2897
+[01/May/2023 18:00:06] "GET /api/log HTTP/1.0" 200 2993
 Not Found: /
-[30/Apr/2023 20:52:15] "GET / HTTP/1.0" 404 2486
+[01/May/2023 18:08:24] "GET / HTTP/1.0" 404 2486
 Not Found: /
-[30/Apr/2023 21:05:31] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 21:05:48] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[30/Apr/2023 21:13:23] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 21:52:59] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 22:15:58] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 22:23:36] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[30/Apr/2023 22:27:10] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 22:35:26] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[30/Apr/2023 23:01:33] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[30/Apr/2023 23:34:57] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 23:39:55] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[30/Apr/2023 23:39:56] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[30/Apr/2023 23:44:48] "GET / HTTP/1.0" 404 2489
-Not Found: /.env
-[30/Apr/2023 23:45:49] "GET /.env HTTP/1.0" 404 2516
-Not Found: /
-[01/May/2023 00:22:08] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 00:50:57] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 01:30:31] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 01:33:11] "GET /?XDEBUG_SESSION_START=phpstorm HTTP/1.0" 404 2519
-Not Found: /
-[01/May/2023 02:00:12] "GET / HTTP/1.0" 404 2486
-Not Found: /favicon.ico
-[01/May/2023 02:00:12] "GET /favicon.ico HTTP/1.0" 404 2537
-Not Found: /sitemap.xml
-Not Found: /robots.txt
-[01/May/2023 02:00:13] "GET /sitemap.xml HTTP/1.0" 404 2537
-[01/May/2023 02:00:13] "GET /robots.txt HTTP/1.0" 404 2534
-Not Found: /
-[01/May/2023 02:11:33] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 02:23:50] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 02:41:00] "GET / HTTP/1.0" 404 2489
-Not Found: /actuator/gateway/routes
-[01/May/2023 02:48:14] "GET /actuator/gateway/routes HTTP/1.0" 404 2576
-Not Found: /.env
-[01/May/2023 02:52:30] "GET /.env HTTP/1.0" 404 2516
-Not Found: /
-[01/May/2023 02:55:17] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 03:23:48] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 03:23:49] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 03:56:39] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 03:57:57] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 03:57:58] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 04:03:32] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 04:03:33] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 04:04:55] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 04:04:56] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 04:15:23] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 04:33:44] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 04:34:42] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 04:39:57] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 04:40:33] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 05:10:53] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 05:14:40] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 06:19:52] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 06:19:54] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 06:28:08] "GET / HTTP/1.0" 404 2489
-Not Found: /HNAP1/
-[01/May/2023 06:28:09] "POST /HNAP1/ HTTP/1.0" 404 2526
-Not Found: /
-[01/May/2023 06:48:44] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 07:03:53] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 07:34:12] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 07:39:29] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 07:45:17] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 07:59:44] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 08:14:32] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 08:20:17] "GET / HTTP/1.0" 404 2489
-Not Found: /
-[01/May/2023 08:38:55] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 09:09:35] "OPTIONS / HTTP/1.0" 404 2490
-Not Found: /hfIE
-[01/May/2023 09:23:25] "GET /hfIE HTTP/1.0" 404 2519
-Not Found: /VFvK
-[01/May/2023 09:23:26] "GET /VFvK HTTP/1.0" 404 2519
-Not Found: /aab8
-[01/May/2023 09:23:26] "GET /aab8 HTTP/1.0" 404 2519
-Not Found: /jquery-3.3.1.slim.min.js
-[01/May/2023 09:23:27] "GET /jquery-3.3.1.slim.min.js HTTP/1.0" 404 2579
-Not Found: /aab9
-[01/May/2023 09:23:28] "GET /aab9 HTTP/1.0" 404 2519
-Not Found: /jquery-3.3.2.slim.min.js
-[01/May/2023 09:23:30] "GET /jquery-3.3.2.slim.min.js HTTP/1.0" 404 2579
-Not Found: /
-[01/May/2023 10:44:59] "GET / HTTP/1.0" 404 2486
-Not Found: /
-[01/May/2023 11:03:43] "GET / HTTP/1.0" 404 2486
-Not Found: /robots.txt
-[01/May/2023 11:03:44] "GET /robots.txt HTTP/1.0" 404 2534
-Not Found: /sitemap.xml
-[01/May/2023 11:03:45] "GET /sitemap.xml HTTP/1.0" 404 2537
+[01/May/2023 18:37:42] "GET / HTTP/1.0" 404 2486
 Not Found: /boaform/admin/formLogin
-[01/May/2023 11:18:21] "POST /boaform/admin/formLogin HTTP/1.0" 404 2577
+[01/May/2023 19:34:53] "POST /boaform/admin/formLogin HTTP/1.0" 404 2577
 Not Found: /
-[01/May/2023 11:33:56] "GET / HTTP/1.0" 404 2486
+[01/May/2023 20:01:43] "GET / HTTP/1.0" 404 2486
+Not Found: /
+[01/May/2023 20:06:17] "GET / HTTP/1.0" 404 2486
+Not Found: /
+[01/May/2023 20:29:18] "GET / HTTP/1.0" 404 2486
+Not Found: /geoserver/web/
+[01/May/2023 20:31:03] "GET /geoserver/web/ HTTP/1.0" 404 2546
+[01/May/2023 21:10:50] "GET /api HTTP/1.0" 301 0
+[01/May/2023 21:10:51] "GET /api/ HTTP/1.0" 200 5443
+[01/May/2023 21:10:51] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.0" 200 121457
+[01/May/2023 21:10:51] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.0" 200 3385
+[01/May/2023 21:10:51] "GET /static/rest_framework/css/prettify.css HTTP/1.0" 200 817
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/ajax-form.js HTTP/1.0" 200 3597
+[01/May/2023 21:10:51] "GET /static/rest_framework/css/default.css HTTP/1.0" 200 1152
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/jquery-3.5.1.min.js HTTP/1.0" 200 89476
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/csrf.js HTTP/1.0" 200 1719
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/default.js HTTP/1.0" 200 1268
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/prettify-min.js HTTP/1.0" 200 13632
+[01/May/2023 21:10:51] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.0" 200 39680
+[01/May/2023 21:10:51] "GET /static/rest_framework/img/grid.png HTTP/1.0" 200 1458
+[01/May/2023 21:10:55] "GET /api/log HTTP/1.0" 200 5680
+/home/zong/files/apiserver/account/views.py changed, reloading.
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+May 01, 2023 - 21:43:21
+Django version 4.1.2, using settings 'apiserver.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.

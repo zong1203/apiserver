@@ -174,18 +174,18 @@ None
 #Return one or multiple user data in the form of an array.
 {
     "id": your id(integer),
-    "Launched": launch status,
-    "Img1": "name of image(Cannot be NULL)",
-    "Img2": "name of image(Can be NULL)",
-    "Img3": "name of image(Can be NULL)",
-    "Img4": "name of image(Can be NULL)",
-    "Img5": "name of image(Can be NULL)",
-    "Name": "name of commodity",
-    "Deacription": "Deacription",
-    "Price": "Price",
-    "Amount": "Amount",
-    "Position": "Location of the commodity",
-    "Account": "Who uploaded this product"
+    "Account": "who launched this commodity",
+    "Launched": launch state(boolean),
+    "Name": "commodity's name",
+    "Description": "commodity's description",
+    "Price": "commodity's price",
+    "Amount": "commodity's amount",
+    "Position": "where is the commodity",
+    "Image": [
+      "an array of picture name",
+      "maxmium is 5 picture",
+      "at least 1"
+    ]
 }
 ```
 </details>
@@ -249,18 +249,18 @@ None
 #Return one or multiple user data in the form of an array depending on whether parameters are added.Format as follows.
 {
     "id": your id(integer),
-    "Launched": launch status,
-    "Img1": "name of image(Cannot be NULL)",
-    "Img2": "name of image(Can be NULL)",
-    "Img3": "name of image(Can be NULL)",
-    "Img4": "name of image(Can be NULL)",
-    "Img5": "name of image(Can be NULL)",
-    "Name": "name of commodity",
-    "Deacription": "Deacription",
-    "Price": "Price",
-    "Amount": "Amount",
-    "Position": "Location of the commodity",
-    "Account": "Who uploaded this product"
+    "Account": "who launched this commodity",
+    "Launched": launch state(boolean),
+    "Name": "commodity's name",
+    "Description": "commodity's description",
+    "Price": "commodity's price",
+    "Amount": "commodity's amount",
+    "Position": "where is the commodity",
+    "Image": [
+      "an array of picture name",
+      "maxmium is 5 picture",
+      "at least 1"
+    ]
 }
 ```
 
@@ -285,19 +285,19 @@ Authorization:your jwt token
 ```json
 #正常情況.
 {
-    "id": your commodity id(integer),
-    "Launched": launch status,
-    "Img1": "name of image(Cannot be NULL)",
-    "Img2": "name of image(Can be NULL)",
-    "Img3": "name of image(Can be NULL)",
-    "Img4": "name of image(Can be NULL)",
-    "Img5": "name of image(Can be NULL)",
-    "Name": "name of commodity",
-    "Deacription": "Deacription",
-    "Price": "Price",
-    "Amount": "Amount",
-    "Position": "Location of the commodity",
-    "Account": "Who uploaded this product"
+    "id": your id(integer),
+    "Account": "who launched this commodity",
+    "Launched": launch state(boolean),
+    "Name": "commodity's name",
+    "Description": "commodity's description",
+    "Price": "commodity's price",
+    "Amount": "commodity's amount",
+    "Position": "where is the commodity",
+    "Image": [
+      "an array of picture name",
+      "maxmium is 5 picture",
+      "at least 1"
+    ]
 }
 ```
 ```json
@@ -363,6 +363,7 @@ Authorization:your jwt token
 ```json
 {
     "name":"your commodity name",
+    "launched":"launched state",
     "description":"description",
     "price":"your price",
     "amount":"commodity amount",

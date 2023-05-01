@@ -126,7 +126,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 body = json.loads(body_unicode)
             except:
                 return JsonResponse({"fail":"please use json"})
-            if 'name' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body:
+            if 'name' not in body or 'launched' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body:
                 return JsonResponse({"success":False,"message":"缺少必要資料"})
             img = [commodity[0].Img1,commodity[0].Img2,commodity[0].Img3,commodity[0].Img4,commodity[0].Img5]
             for i in img:
@@ -138,8 +138,8 @@ class CommodityViewSet(viewsets.ModelViewSet):
             while len(img) < 5:
                 img.append("")
             Commodity.objects.filter(id=int(commodity_id)).update(
-                Launched = True,Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],Img5 = img[4],
-                Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Launched = body["launched"],Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],
+                Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
             return JsonResponse({"success":True,"message":"ok"})
