@@ -19,6 +19,26 @@ class CommodityViewSet(viewsets.ModelViewSet):
     queryset = Commodity.objects.all()
     serializer_class = CommoditySerializer
 
+    def create(self, request):
+        return JsonResponse({"success":False})
+    
+    def retrieve(self, request):
+        return JsonResponse({"success":False})
+
+    def update(self, request):
+        return JsonResponse({"success":False})
+
+    @action(detail=False, methods=['get'])
+    def get_commodity(self, request):
+        commodity_id = request.query_params.get('id', None)
+        if not commodity_id:
+            return JsonResponse({"success":False,"commodity":[]})
+        commodity = search_by_commodity_raw(commodity_id=commodity_id)
+        serializer = CommoditySerializer(commodity, many=True)
+        if not serializer.data[0]["Launched"]:
+            return JsonResponse({"success":False,"commodity":[]})
+        return Response({"success":True,"commodity":serializer.data[0]}, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=['get'])
     def search_by_commodity(self, request):
         commodity_name = request.query_params.get('commodity', None)
@@ -35,10 +55,11 @@ class CommodityViewSet(viewsets.ModelViewSet):
         state, account = auth(headers)
         if state == False:
             return JsonResponse({"success":False,"message":"json time limit exceeded"})
-        commodity = Commodity.objects.filter(Account=account).values()
+        commodity = search_by_commodity_raw(account=account)
+        serializer = CommoditySerializer(commodity, many=True)
         launched = []
         unlaunched = []
-        for i in commodity:
+        for i in serializer.data:
             if i["Launched"]:
                 launched.append(i)
             else:
@@ -70,7 +91,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
         except:
             return JsonResponse({"fail":"can't find 'launched' in body"})
         Commodity.objects.filter(id=int(commodity_id)).update(Launched = launched)
-        return JsonResponse({"success":True,"message":"ok"})
+        return JsonResponse({"success":True})
         
     
     @action(detail=False, methods=['get','post','put','delete'])
@@ -87,12 +108,13 @@ class CommodityViewSet(viewsets.ModelViewSet):
             commodity_id = request.query_params.get('id', None)
             if not commodity_id:
                 return JsonResponse({"success":False,"message":"Please add parameters to the URL."})
-            commodity = Commodity.objects.filter(id=commodity_id).values()
+            commodity = search_by_commodity_raw(commodity_id=commodity_id)
             if not commodity:
                 return JsonResponse({"success":False,"message":"can't find commodity with this id"})
-            if account != commodity[0]["Account"]:
+            if account != commodity[0].Account:
                 return JsonResponse({"success":False,"message":"this commodity is not yours"})
-            return JsonResponse({"success":True,"info":commodity[0]})
+            serializer = CommoditySerializer(commodity, many=True)
+            return JsonResponse({"success":True,"info":serializer.data[0]})
         
         # C
         if request.method == 'POST':
@@ -111,7 +133,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
-            return JsonResponse({"success":True,"message":"ok"})
+            return JsonResponse({"success":True})
         
         # U
         if request.method == 'PUT':
@@ -142,7 +164,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
-            return JsonResponse({"success":True,"message":"ok"})
+            return JsonResponse({"success":True})
             
         # D
         if request.method == 'DELETE':

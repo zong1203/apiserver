@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from commodity.models import Commodity
 
-
 class CommoditySerializer(serializers.ModelSerializer):
     class Meta:
         model = Commodity
@@ -9,13 +8,13 @@ class CommoditySerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         data = super().to_representation(value)
+        data["Description"] = data["Deacription"]
+        data.pop("Deacription")
         image = []
         for i in (data["Img1"],data["Img2"],data["Img3"],data["Img4"],data["Img5"]):
             if i:
-                image.append(i)
+                image.append("image/get/?picture_name="+i)
         data["Image"] = image
         for i in range(1,6):
             data.pop(f"Img{i}")
-        data["Description"] = data["Deacription"]
-        data.pop("Deacription")
         return data

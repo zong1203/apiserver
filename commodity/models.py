@@ -31,3 +31,6 @@ def search_by_commodity_raw(**kwargs):
     else:
         result = Commodity.objects.raw('SELECT * FROM Commodity')
     return result
+
+def get_commodity_by_account(account):
+    return Commodity.objects.filter(Account=account,Launched=True).values()

@@ -3,6 +3,9 @@ from account.models import Userfile,Chathistory
 from account.models import search_by_account_raw,jwt_search,account_search
 from account.serializers import UserfileSerializer
 
+from commodity.models import get_commodity_by_account
+from commodity.serializers import CommoditySerializer
+
 from picture.views import upload_image
 
 from rest_framework import viewsets,status
@@ -20,6 +23,15 @@ class UserfileViewSet(viewsets.ModelViewSet):
     queryset = Userfile.objects.all()
     serializer_class = UserfileSerializer
 
+    def create(self, request):
+        return JsonResponse({"success":False})
+    
+    def retrieve(self, request):
+        return JsonResponse({"success":False})
+
+    def update(self, request):
+        return JsonResponse({"success":False})
+
     @action(detail=False, methods=['get'])
     def search_by_account(self, request):
         account = request.query_params.get('account', None)
@@ -27,7 +39,32 @@ class UserfileViewSet(viewsets.ModelViewSet):
         serializer = UserfileSerializer(userfile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['post'])
+    def browse_store(self, request):
+        account = request.query_params.get('account', None)
+        userfile = search_by_account_raw(account=account)
+        if not userfile:
+            return JsonResponse({"success":False})
+        provider = {}
+        provider["phone"] = userfile[0].Phonenumber
+        provider["mail"] = userfile[0].Email
+        provider["nickname"] = userfile[0].Name
+        provider["intro"] = userfile[0].Introduction
+        commodity = get_commodity_by_account(account)
+        serializer = CommoditySerializer(commodity, many=True)
+        return JsonResponse({"success":True,"provider":provider,"commodity":serializer.data})
+    
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 def log(request):
+    # if get_client_ip(request=request) != "192.168.0.1":
+    #     return render(request, 'log.html', {'sorry': "Sorry,you're not admin"})
     with open("server.log","r") as f:
         text = f.readlines()
         text = [i.rstrip() for i in text]
