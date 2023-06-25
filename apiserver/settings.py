@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['125.229.111.81']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,12 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_mongoengine',
-    'channels',
     'account',
     'picture',
     'commodity',
     'drf_yasg',
-    'chat',
 ]
 
 SWAGGER_SETTINGS = {
