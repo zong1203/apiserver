@@ -6,7 +6,7 @@ ___
 
 ## Account
 
-### /api/login/
+### /api/userfile/login/
 
 <details><summary>click me</summary>
 
@@ -49,7 +49,7 @@ ___
 
 </details>
 
-### /api/signup/
+### /api/userfile/signup/
 
 <details><summary>click me</summary>
 
@@ -62,7 +62,6 @@ ___
 {
     "account":"your account",
     "password":"your password",
-    "nickname":"your nickname",
     "mail":"your email address",
     "phone":"your phone number"
 }
@@ -92,7 +91,7 @@ ___
 
 </details>
 
-### /api/token_verify/
+### /api/userfile/verify_token/
 
 <details><summary>click me</summary>
 
@@ -109,14 +108,12 @@ Authorization:your jwt token
 #If the JWT token is within its validity period of 10 days.
 {
     "success": true,
-    "account": "your account"
 }
 ```
 ```json
-#If the JWT token has expired or the 'Authorization' field cannot be obtained from the header.
+#當jwt token過期或是不合法時.
 {
     "success": false,
-    "account": "your account"
 }
 ```
 

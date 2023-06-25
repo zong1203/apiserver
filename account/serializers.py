@@ -5,4 +5,4 @@ from account.models import Userfile
 class UserfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Userfile
-        fields = '__all__'
+        fields = ('Account',"Name","Email","Phonenumber","StudentID","Introduction","Favorite","Profliephoto")

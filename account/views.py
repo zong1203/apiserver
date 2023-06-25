@@ -17,21 +17,129 @@ from django.shortcuts import render
 
 import json,jwt,datetime,hashlib
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 secret = "zong1203vafnvbiwfjnvbhlifzdv"
 # Create your views here.
 class UserfileViewSet(viewsets.ModelViewSet):
     queryset = Userfile.objects.all()
     serializer_class = UserfileSerializer
 
+    @swagger_auto_schema(auto_schema=None)
     def create(self, request):
         return JsonResponse({"success":False})
     
+    @swagger_auto_schema(auto_schema=None)
     def retrieve(self, request):
         return JsonResponse({"success":False})
 
+    @swagger_auto_schema(auto_schema=None)
     def update(self, request):
         return JsonResponse({"success":False})
+    
+    @swagger_auto_schema(auto_schema=None)
+    def destroy(self, request):
+        return JsonResponse({"success":False})
+    
+    @swagger_auto_schema(auto_schema=None)
+    def partial_update(self, request):
+        return JsonResponse({"success":False})
 
+    @swagger_auto_schema(
+        method='post',
+        operation_summary='登入用API',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'account':openapi.Schema(type=openapi.TYPE_STRING,description='帳號'),
+                'password':openapi.Schema(type=openapi.TYPE_STRING,description='密碼'),
+            }
+        ),
+        responses={
+            200:'"success":True,\n"message":"jwt token",\n"account":"帳號"',
+            400:'"success":False,\n"message":"錯誤訊息",\n"account":"帳號"'
+        }
+    )
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        body_unicode = request.body.decode('utf-8')
+        try:
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse(status=400,data={"fail":"please use json"})
+        result = jwt_search(body["account"],body["password"])
+        if result != 'ok':
+            return JsonResponse(status=400,data={"success":False,"message":result,"account":body["account"]})
+        year, month, date = get_date()
+        token = jwt.encode({"username":body["account"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
+        return JsonResponse(status=200,data={"success":True,"message":token,"account":body["account"]})
+    
+    @swagger_auto_schema(
+        method='get',
+        operation_summary='驗證token是否過期',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+        ],
+        responses={
+            200:'"success":True',
+            400:'"success":False'
+        }
+    )
+    @action(detail=False, methods=['get'])
+    def verify_token(self, request):
+        state, account, message = auth(request)
+        if state:
+            return JsonResponse(status=400,data={"success":state})
+        return JsonResponse(status=200,data={"success":state})
+    
+    @swagger_auto_schema(
+        method='post',
+        operation_summary='註冊用API',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'account':openapi.Schema(type=openapi.TYPE_STRING,description='帳號'),
+                'password':openapi.Schema(type=openapi.TYPE_STRING,description='密碼'),
+                'mail':openapi.Schema(type=openapi.TYPE_STRING,description='email地址'),
+                'phone':openapi.Schema(type=openapi.TYPE_STRING,description='電話號碼'),
+            }
+        ),
+        responses={
+            200:'"success":True,\n"message":"註冊成功"',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
+    @action(detail=False, methods=['post'])
+    def signup(self, request):
+        body_unicode = request.body.decode('utf-8')
+        try:
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse(status=400,data={"fail":"please use json"})
+        result = account_search(body["account"])
+        if result == "帳號已經被註冊":
+            return JsonResponse(status=400,data={"success":False,"message":result})
+        if "account" in body and "password" in body and "mail" in body and "phone" in body:
+            Userfile.objects.create(
+                Account = body["account"],
+                Password = hashlib.sha256(body["password"].encode('utf-8')).hexdigest(),
+                Name = body["account"],
+                Email = body["mail"],
+                Phonenumber = body["phone"],
+                StudentID = "",
+                Introduction = "",
+                Favorite = "",
+                Profliephoto = ""
+            )
+            result = account_search(body["account"])
+            if result == "帳號已經被註冊":
+                return JsonResponse(status=200,data={"success":True,"message":"註冊成功"})
+            return JsonResponse(status=400,data={"success":False,"message":"註冊失敗"})
+        else:
+            return JsonResponse(status=400,data={"success":False,"message":"註冊失敗"})
+
+    @swagger_auto_schema(deprecated=True)
     @action(detail=False, methods=['get'])
     def search_by_account(self, request):
         account = request.query_params.get('account', None)
@@ -39,12 +147,27 @@ class UserfileViewSet(viewsets.ModelViewSet):
         serializer = UserfileSerializer(userfile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    @action(detail=False, methods=['post'])
+    @swagger_auto_schema(
+        operation_summary='用來瀏覽賣場以及賣場內的所有商品',
+        manual_parameters=[
+            openapi.Parameter(
+                name='account',
+                in_=openapi.IN_QUERY,
+                description='賣場名稱',
+                type=openapi.TYPE_STRING
+            )
+        ],
+        responses={
+            200:'"success":True\n"provider":商店的基本訊息\n"commodity":商店內的貨物',
+            400:'"success":False'
+        }
+    )
+    @action(detail=False, methods=['get'])
     def browse_store(self, request):
         account = request.query_params.get('account', None)
         userfile = search_by_account_raw(account=account)
         if not userfile:
-            return JsonResponse({"success":False})
+            return JsonResponse(status=400,data={"success":False})
         provider = {}
         provider["phone"] = userfile[0].Phonenumber
         provider["mail"] = userfile[0].Email
@@ -52,7 +175,7 @@ class UserfileViewSet(viewsets.ModelViewSet):
         provider["intro"] = userfile[0].Introduction
         commodity = get_commodity_by_account(account)
         serializer = CommoditySerializer(commodity, many=True)
-        return JsonResponse({"success":True,"provider":provider,"commodity":serializer.data})
+        return JsonResponse(status=200,data={"success":True,"provider":provider,"commodity":serializer.data})
     
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -69,83 +192,23 @@ def log(request):
         text = f.readlines()
         text = [i.rstrip() for i in text]
         return render(request, 'log.html', {'text': text})
-# JWT token
+
 def get_date():
     today = datetime.date.today()
     return today.year,today.month,today.day
 
-def get_token(request):
-    if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        try:
-            body = json.loads(body_unicode)
-        except:
-            return JsonResponse({"fail":"please use json"})
-        result = jwt_search(body["account"],body["password"])
-        if result != 'ok':
-            return JsonResponse({"success":False,"message":result,"account":body["account"]})
-        year, month, date = get_date()
-        token = jwt.encode({"username":body["account"],"password":body["password"],"year":year,"month":month,"date":date}, secret, algorithm='HS256')
-        return JsonResponse({"success":True,"message":token,"account":body["account"]})
-    else:
-        return JsonResponse({"fail":"please use post method"})
-
-def verify_token(request):
+def auth(request):
     try:
-        headers = request.headers.get("Authorization")
-        try:
-            payload = jwt.decode(headers, secret, algorithms='HS256')
-            year, month, date = get_date()
-            d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
-            d2 = datetime.date(year, month, date)
-            if abs(d2-d1).days > 10:
-                return JsonResponse({"success":False,"account":payload["username"]})
-            return JsonResponse({"success":True,"account":payload["username"]})
-        except:
-            return JsonResponse({"success":False,"account":payload["username"]})
+        token = request.headers.get("Authorization")
+        payload = jwt.decode(token, secret, algorithms='HS256')
     except:
-        return JsonResponse({"success":False,"account":payload["username"]})
-
-def auth(token):
-    payload = jwt.decode(token, secret, algorithms='HS256')
+        return False,None,{"success":False,"message":"authorizate failed"}
     year, month, date = get_date()
     d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
     d2 = datetime.date(year, month, date)
     if abs(d2-d1).days > 10:
-        return False,payload["username"]
-    return True,payload["username"]
-# JWT token finish
-# Sign up
-def sign_up(request):
-    if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        try:
-            body = json.loads(body_unicode)
-        except:
-            return JsonResponse({"fail":"please use json"})
-        result = account_search(body["account"])
-        if result == "帳號已經被註冊":
-            return JsonResponse({"success":False,"message":result})
-        print(body)
-        if "account" in body and "password" in body and "mail" in body and "phone" in body:
-            Userfile.objects.create(
-                Account = body["account"],
-                Password = hashlib.sha256(body["password"].encode('utf-8')).hexdigest(),
-                Name = body["account"],
-                Email = body["mail"],
-                Phonenumber = body["phone"],
-                StudentID = "",
-                Introduction = "",
-                Favorite = "",
-                Profliephoto = ""
-            )
-            result = account_search(body["account"])
-            if result == "帳號已經被註冊":
-                return JsonResponse({"success":True,"message":"註冊成功"})
-            return JsonResponse({"success":False,"message":"註冊失敗"})
-        else:
-            return JsonResponse({"success":False,"message":"註冊失敗"})
-# Sign up finish
+        return False,payload["username"],{"success":False,"message":"json time limit exceeded"}
+    return True,payload["username"],None
 #======================================================================================================
 #chathistory
 def new_message(sender,receiver,type,content):
