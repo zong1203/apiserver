@@ -93,7 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'apiserver.wsgi.application'
 
-
+ASGI_APPLICATION = 'apiserver.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
