@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['125.229.111.81']
 
 INSTALLED_APPS = [
     'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +46,9 @@ INSTALLED_APPS = [
     'account',
     'picture',
     'commodity',
+    'cart',
     'drf_yasg',
+    'chat',
 ]
 
 SWAGGER_SETTINGS = {
@@ -96,6 +99,14 @@ WSGI_APPLICATION = 'apiserver.wsgi.application'
 ASGI_APPLICATION = 'apiserver.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 DATABASES = {
     'default': {

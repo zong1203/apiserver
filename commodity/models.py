@@ -20,8 +20,8 @@ class Commodity(models.Model):
 
 def search_by_commodity_keyword(keyword):
     if keyword:
+        print(keyword)
         keyword_set = keyword.split(" ")
-        print(keyword_set)
         commodity = []
         for keyword in keyword_set:
             commodity += Commodity.objects.filter(Name__contains=keyword,Launched=True)

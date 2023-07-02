@@ -18,6 +18,7 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 from account import views as account_views
 from commodity import views as commodity_views
+from cart import views as cart_views
 # from chat.views import home_page
 
 from rest_framework import permissions
@@ -40,6 +41,7 @@ schema_view = get_schema_view(
 router = DefaultRouter()
 router.register('userfile', account_views.UserfileViewSet)
 router.register('commodity', commodity_views.CommodityViewSet)
+router.register('cart', cart_views.CartViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
@@ -49,6 +51,5 @@ urlpatterns = [
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    # path('chat/', include('chat.urls', namespace='chat')),
-    # path('', home_page, name='home'),
+    path('chat/', include('chat.urls', namespace='chat')),
 ]
