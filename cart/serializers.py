@@ -4,7 +4,7 @@ from cart.models import Cart
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ("Commodity_ID","Account")
+        fields = ("Commodity_ID","Account","Seller")
 
     # def to_representation(self, value):
     #     data = super().to_representation(value)
