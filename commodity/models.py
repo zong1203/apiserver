@@ -23,6 +23,10 @@ def get_first_picture(commodity_id):
     c = Commodity.objects.filter(id=commodity_id)
     return "image/get/?picture_name="+c[0].Img1
 
+def get_launch_state_by_ID(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return c[0].Launched
+
 def search_by_commodity_keyword(keyword):
     if keyword:
         print(keyword)

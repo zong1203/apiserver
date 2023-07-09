@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 
 from cart.models import Cart
 from cart.serializers import CartSerializer
-from commodity.models import search_by_commodity_raw,get_first_picture
+from commodity.models import search_by_commodity_raw,get_first_picture,get_launch_state_by_ID
 from account.views import auth
 from account.models import get_nickname_by_account
 
@@ -42,7 +42,7 @@ class CartViewSet(viewsets.ModelViewSet):
     def partial_update(self, request):
         return JsonResponse({"success":False})
 
-    @action(detail=False, methods=['get','post','delete'])
+    @action(detail=False, methods=['get'])
     def my_cart(self, request):
         state, account, state_message = auth(request)
         if state == False:
@@ -51,20 +51,23 @@ class CartViewSet(viewsets.ModelViewSet):
         seller_list = []
         data = {}
         for i in cart:
-            if i.Seller not in seller_list:
+            if (i.Seller not in seller_list) and (get_launch_state_by_ID(i.Commodity_ID)):
                 seller_list.append(i.Seller)
-                data[i.Seller] = {}
         for i in seller_list:
+            data[i] = {}
             data[i]["nickname"] = get_nickname_by_account(i)
             data[i]["cover"] = ""
             data[i]["items"] = []
             first_commodity = True
+            commodity_counter = 0
             for j in cart:
                 if j.Seller == i:
                     if first_commodity:
                         data[i]["cover"] = get_first_picture(j.Commodity_ID)
-                    data[i]["items"].append(j.Commodity_Name)
-        print(data)
+                        first_commodity = False
+                    if (get_launch_state_by_ID(j.Commodity_ID)) and (commodity_counter < 4):
+                        data[i]["items"].append(j.Commodity_Name)
+                        commodity_counter+=1
         return JsonResponse(status=200,data={"success":True,"result":data})
 
     @swagger_auto_schema(
