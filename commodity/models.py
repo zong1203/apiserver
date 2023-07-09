@@ -12,11 +12,16 @@ class Commodity(models.Model):
     Deacription = models.TextField(verbose_name='商品描述')
     Price = models.CharField(max_length=5,verbose_name='商品價格')
     Amount = models.CharField(max_length=5,verbose_name='商品數量')
+    BorrowedAmount = models.CharField(max_length=5,verbose_name='已借出的數量',default='0')
     Position = models.TextField(verbose_name='商品位置')
     Account = models.CharField(max_length=20,  default='',verbose_name='賣場名稱')
 
     class Meta:
         db_table = "Commodity"
+
+def get_first_picture(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return "image/get/?picture_name="+c[0].Img1
 
 def search_by_commodity_keyword(keyword):
     if keyword:

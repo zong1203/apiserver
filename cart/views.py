@@ -8,8 +8,9 @@ from rest_framework.decorators import action
 
 from cart.models import Cart
 from cart.serializers import CartSerializer
-from commodity.models import search_by_commodity_raw
+from commodity.models import search_by_commodity_raw,get_first_picture
 from account.views import auth
+from account.models import get_nickname_by_account
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -40,6 +41,31 @@ class CartViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(auto_schema=None)
     def partial_update(self, request):
         return JsonResponse({"success":False})
+
+    @action(detail=False, methods=['get','post','delete'])
+    def my_cart(self, request):
+        state, account, state_message = auth(request)
+        if state == False:
+            return JsonResponse(status=400,data=state_message)
+        cart = Cart.objects.filter(Account=account)
+        seller_list = []
+        data = {}
+        for i in cart:
+            if i.Seller not in seller_list:
+                seller_list.append(i.Seller)
+                data[i.Seller] = {}
+        for i in seller_list:
+            data[i]["nickname"] = get_nickname_by_account(i)
+            data[i]["cover"] = ""
+            data[i]["items"] = []
+            first_commodity = True
+            for j in cart:
+                if j.Seller == i:
+                    if first_commodity:
+                        data[i]["cover"] = get_first_picture(j.Commodity_ID)
+                    data[i]["items"].append(j.Commodity_Name)
+        print(data)
+        return JsonResponse(status=200,data={"success":True,"result":data})
 
     @swagger_auto_schema(
         method='get',
@@ -113,7 +139,7 @@ class CartViewSet(viewsets.ModelViewSet):
             for i in cart:
                 if commodity_id == i.Commodity_ID:
                     return JsonResponse(status=400,data={"success":False,"message":"Already in your Cart."})
-            Cart.objects.create(Account=account,Seller=commodity[0].Account,Commodity_ID=commodity_id)
+            Cart.objects.create(Account=account,Seller=commodity[0].Account,Commodity_ID=commodity_id,Commodity_Name=commodity[0].Name)
             return JsonResponse(status=200,data={"success":True})
         # D
         if request.method == 'DELETE':

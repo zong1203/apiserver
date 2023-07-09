@@ -4,7 +4,7 @@ from commodity.models import Commodity
 class CommoditySerializer(serializers.ModelSerializer):
     class Meta:
         model = Commodity
-        fields = ("id","Account","Launched","Name","Deacription","Price","Amount","Position","Img1","Img2","Img3","Img4","Img5")
+        fields = ("id","Account","Launched","Name","Deacription","Price","Amount","BorrowedAmount","Position","Img1","Img2","Img3","Img4","Img5")
 
     def to_representation(self, value):
         data = super().to_representation(value)

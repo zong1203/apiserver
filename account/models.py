@@ -28,6 +28,10 @@ class Chathistory(models.Model):
     class Meta:
         db_table = "ChatHistory"
 
+def get_nickname_by_account(account):
+    a = Userfile.objects.filter(Account=account)
+    return a[0].Name
+
 def search_by_account_raw(**kwargs):
     account = kwargs.get('account')
     if account:

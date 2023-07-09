@@ -165,9 +165,9 @@ class UserfileViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def browse_store(self, request):
         account = request.query_params.get('account', None)
-        userfile = search_by_account_raw(account=account)
-        if not userfile:
+        if not account:
             return JsonResponse(status=400,data={"success":False})
+        userfile = search_by_account_raw(account=account)
         provider = {}
         provider["phone"] = userfile[0].Phonenumber
         provider["mail"] = userfile[0].Email
