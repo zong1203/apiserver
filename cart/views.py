@@ -41,53 +41,47 @@ class CartViewSet(viewsets.ModelViewSet):
     def partial_update(self, request):
         return JsonResponse({"success":False})
 
-    # @swagger_auto_schema(
-    #     method='get',
-    #     operation_summary='取得商品資訊(修改用),需使用jwt,並且在網址列加上目標商品的id',
-    #     manual_parameters=[
-    #         openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
-    #         openapi.Parameter(name='id',in_=openapi.IN_QUERY,description='商品id',type=openapi.TYPE_STRING)
-    #     ],
-    #     responses={
-    #         200:'"success":True,\n"data":商品訊息,',
-    #         400:'"success":False,\n"message":"錯誤訊息"'
-    #     }
-    # )
-    # @swagger_auto_schema(
-    #     method='post',
-    #     operation_summary='上傳商品,圖片為base64傳輸,需使用jwt',
-    #     manual_parameters=[
-    #         openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
-    #     ],
-    #     request_body=openapi.Schema(
-    #         type=openapi.TYPE_OBJECT,
-    #         properties={
-    #             'name':openapi.Schema(type=openapi.TYPE_STRING,description='商品名稱'),
-    #             'launched':openapi.Schema(type=openapi.TYPE_BOOLEAN,description='上下架狀態'),
-    #             'description':openapi.Schema(type=openapi.TYPE_STRING,description='商品描述'),
-    #             'price':openapi.Schema(type=openapi.TYPE_STRING,description='商品價格'),
-    #             'amount':openapi.Schema(type=openapi.TYPE_STRING,description='商品數量'),
-    #             'position':openapi.Schema(type=openapi.TYPE_STRING,description='商品位置'),
-    #             'image':openapi.Schema(type=openapi.TYPE_STRING,description='商品圖片,至少一張,至多五張,以陣列形式上傳'),
-    #         }
-    #     ),
-    #     responses={
-    #         200:'"success":True',
-    #         400:'"success":False,\n"message":"錯誤訊息"'
-    #     }
-    # )
-    # @swagger_auto_schema(
-    #     method='delete',
-    #     operation_summary='刪除商品,需使用jwt,並且在網址列加上目標商品的id',
-    #     manual_parameters=[
-    #         openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
-    #         openapi.Parameter(name='id',in_=openapi.IN_QUERY,description='商品id',type=openapi.TYPE_STRING)
-    #     ],
-    #     responses={
-    #         200:'"success":True,\n"data":商品訊息,',
-    #         400:'"success":False,\n"message":"錯誤訊息"'
-    #     }
-    # )
+    @swagger_auto_schema(
+        method='get',
+        operation_summary='確認商品是否存在於購物車內,在網址列加上商品id,並且使用jwt token',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+            openapi.Parameter(name='id',in_=openapi.IN_QUERY,description='商品id',type=openapi.TYPE_STRING)
+        ],
+        responses={
+            200:'"success":True,\n"isAdded":是否存在於購物車內,',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
+    @swagger_auto_schema(
+        method='post',
+        operation_summary='將特定商品新增到購物車內,在網址列加上商品id,並且使用jwt token',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+            openapi.Parameter(name='id',in_=openapi.IN_QUERY,description='商品id',type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+            }
+        ),
+        responses={
+            200:'"success":True',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
+    @swagger_auto_schema(
+        method='delete',
+        operation_summary='將特定商品從購物車內移除,在網址列加上商品id,並且使用jwt token',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+            openapi.Parameter(name='id',in_=openapi.IN_QUERY,description='商品id',type=openapi.TYPE_STRING)
+        ],
+        responses={
+            200:'"success":True',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
     @action(detail=False, methods=['get','post','delete'])
     def cart_CRUD(self, request):
         state, account, state_message = auth(request)
