@@ -43,6 +43,26 @@ class CartViewSet(viewsets.ModelViewSet):
         return JsonResponse({"success":False})
 
     @action(detail=False, methods=['get'])
+    def my_storecart(self, request):
+        state, account, state_message = auth(request)
+        if state == False:
+            return JsonResponse(status=400,data=state_message)
+        cart = Cart.objects.filter(Account=account)
+        seller = request.query_params.get('seller', None)
+        data = []
+        for i in cart:
+            if (i.Seller == seller) and get_launch_state_by_ID(i.Commodity_ID):
+                commodity = search_by_commodity_raw(commodity_id=i.Commodity_ID)
+                temp = {}
+                temp["id"] = commodity[0].id
+                temp["name"] = commodity[0].Name
+                temp["cover"] = "image/get/?picture_name="+commodity[0].Img1
+                temp["price"] = commodity[0].Price
+                temp["amount"] = commodity[0].Amount
+                data.append(temp)
+        return JsonResponse(status=200,data={"success":True,"result":data})
+
+    @action(detail=False, methods=['get'])
     def my_cart(self, request):
         state, account, state_message = auth(request)
         if state == False:
