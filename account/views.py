@@ -177,6 +177,25 @@ class UserfileViewSet(viewsets.ModelViewSet):
         serializer = CommoditySerializer(commodity, many=True)
         return JsonResponse(status=200,data={"success":True,"provider":provider,"commodity":serializer.data})
     
+    @action(detail=False, methods=['post'])
+    def password_change(self, request):
+        state, account, state_message = auth(request)
+        if state == False:
+            return JsonResponse(status=400,data=state_message)
+        body_unicode = request.body.decode('utf-8')
+        try:
+            body = json.loads(body_unicode)
+        except:
+            return JsonResponse(status=400,data={"fail":"please use json"})
+        if hashlib.sha256(body["oldPassword"].encode('utf-8')).hexdigest() == Userfile.objects.filter(Account=account)[0].Password:
+            if body["oldPassword"] == body["newPassword"]:
+                return JsonResponse(status=400,data={"success":False,"message":"新舊密碼不可相同"})
+            newpassword_sha256 = hashlib.sha256(body["newPassword"].encode('utf-8')).hexdigest()
+            Userfile.objects.filter(Account=account).update(Password=newpassword_sha256)
+            return JsonResponse(status=200,data={"success":True,"message":"更改成功"})
+        else:
+            return JsonResponse(status=400,data={"success":False,"message":"密碼錯誤"})
+
     @action(detail=False, methods=['get','put'])
     def profile(self, request):
         state, account, state_message = auth(request)
