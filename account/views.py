@@ -1,7 +1,7 @@
 # Create your views here.
 from account.models import Userfile,Chathistory
 from account.models import search_by_account_raw,jwt_search,account_search
-from account.serializers import UserfileSerializer
+from account.serializers import UserfileSerializer,UserfileSerializer_for_profile
 
 from commodity.models import get_commodity_by_account
 from commodity.serializers import CommoditySerializer
@@ -177,6 +177,33 @@ class UserfileViewSet(viewsets.ModelViewSet):
         serializer = CommoditySerializer(commodity, many=True)
         return JsonResponse(status=200,data={"success":True,"provider":provider,"commodity":serializer.data})
     
+    @action(detail=False, methods=['get','put'])
+    def profile(self, request):
+        state, account, state_message = auth(request)
+        if state == False:
+            return JsonResponse(status=400,data=state_message)
+        if request.method == 'GET':
+            Account = Userfile.objects.filter(Account=account)
+            serializer = UserfileSerializer_for_profile(Account, many=True)
+            return JsonResponse(status=200,data={"success":True,"data":serializer.data[0]})
+        if request.method == 'PUT':
+            body_unicode = request.body.decode('utf-8')
+            try:
+                body = json.loads(body_unicode)
+            except:
+                return JsonResponse(status=400,data={"fail":"please use json"})
+            for i in body.keys():
+                if i == "nickname":
+                    Userfile.objects.filter(Account=account).update(Name=body[i])
+                if i == "intro":
+                    Userfile.objects.filter(Account=account).update(Introduction=body[i])
+                if i == "phone":
+                    Userfile.objects.filter(Account=account).update(Phonenumber=body[i])
+                if i == "mail":
+                    Userfile.objects.filter(Account=account).update(Email=body[i])
+            return JsonResponse(status=200,data={"success":True})
+
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
