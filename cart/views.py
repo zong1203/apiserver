@@ -42,6 +42,17 @@ class CartViewSet(viewsets.ModelViewSet):
     def partial_update(self, request):
         return JsonResponse({"success":False})
 
+    @swagger_auto_schema(
+        method='get',
+        operation_summary='確認A帳號在B賣場內把哪些商品加到購物車內,需使用jwt token',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+        ],
+        responses={
+            200:'"success":True,\n"result": [ //陣列形式給出購物清單，沒有商品就空陣列\n----{\n--------id: 6, //商品 id\n--------name: "Bang Dream", //名稱\n--------cover: "img/5230f17c-2a52-4830-9c0f-19c471f70fa4.png", //封面圖片一張\n--------price: 5000, //金額\n--------amount: 1 //剩餘數量\n----}\n]',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
     @action(detail=False, methods=['get'])
     def my_storecart(self, request):
         state, account, state_message = auth(request)
@@ -62,6 +73,17 @@ class CartViewSet(viewsets.ModelViewSet):
                 data.append(temp)
         return JsonResponse(status=200,data={"success":True,"result":data})
 
+    @swagger_auto_schema(
+        method='get',
+        operation_summary='確認購物車內的商品,需使用jwt token',
+        manual_parameters=[
+            openapi.Parameter(name='Authorization',in_=openapi.IN_HEADER,description='你的JWT token',type=openapi.TYPE_STRING),
+        ],
+        responses={
+            200:'"success":True,\n"result": {\n----"賣場1的帳號" : {\n--------nickname : 暱稱,\n--------cover : 封面1張(商品1的第1張圖),\n--------items : [\n------------"商品1名稱",\n------------"商品2名稱",\n------------"商品3名稱",\n------------"商品5名稱",\n--------]\n----},\n----"賣場1的帳號" : {\n--------nickname : 暱稱,\n--------cover : 封面1張(商品1的第1張圖),\n--------items : [\n------------"商品101名稱",\n------------"商品202名稱"]\n----}\n}',
+            400:'"success":False,\n"message":"錯誤訊息"'
+        }
+    )
     @action(detail=False, methods=['get'])
     def my_cart(self, request):
         state, account, state_message = auth(request)
