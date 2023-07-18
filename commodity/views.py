@@ -270,7 +270,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 img[i] = upload_image(j)
             Commodity.objects.create(
                 Launched = body["launched"],Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],
-                Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Img5 = img[4],Name = body["name"],Description = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
             return JsonResponse(status=200,data={"success":True})
@@ -301,7 +301,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 img.append("")
             Commodity.objects.filter(id=int(commodity_id)).update(
                 Launched = body["launched"],Img1 = img[0],Img2 = img[1],Img3 = img[2],Img4 = img[3],
-                Img5 = img[4],Name = body["name"],Deacription = body["description"],Price = body["price"],
+                Img5 = img[4],Name = body["name"],Description = body["description"],Price = body["price"],
                 Amount = body["amount"],Position = body["position"],Account = account
             )
             return JsonResponse(status=200,data={"success":True})

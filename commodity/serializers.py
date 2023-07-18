@@ -4,12 +4,10 @@ from commodity.models import Commodity
 class CommoditySerializer(serializers.ModelSerializer):
     class Meta:
         model = Commodity
-        fields = ("id","Account","Launched","Name","Deacription","Price","Amount","BorrowedAmount","Position","Img1","Img2","Img3","Img4","Img5")
+        fields = ("id","Account","Launched","Name","Description","Price","Amount","BorrowedAmount","Position","Img1","Img2","Img3","Img4","Img5")
 
     def to_representation(self, value):
         data = super().to_representation(value)
-        data["Description"] = data["Deacription"]
-        data.pop("Deacription")
         image = []
         for i in (data["Img1"],data["Img2"],data["Img3"],data["Img4"],data["Img5"]):
             if i:

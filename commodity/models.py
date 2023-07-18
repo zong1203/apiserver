@@ -9,7 +9,7 @@ class Commodity(models.Model):
     Img4 = models.CharField(max_length=45,blank=True,verbose_name='圖片名稱(可選)')
     Img5 = models.CharField(max_length=45,blank=True,verbose_name='圖片名稱(可選)')
     Name = models.CharField(max_length=45,verbose_name='商品名稱')
-    Deacription = models.TextField(verbose_name='商品描述')
+    Description = models.TextField(verbose_name='商品描述')
     Price = models.CharField(max_length=5,verbose_name='商品價格')
     Amount = models.CharField(max_length=5,verbose_name='商品數量')
     BorrowedAmount = models.CharField(max_length=5,verbose_name='已借出的數量',default='0')
