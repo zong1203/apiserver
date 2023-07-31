@@ -2,18 +2,19 @@ from django.db import models
 
 # Create your models here.
 
+
 class Order(models.Model):
-    Order_ID = models.CharField(max_length=255,verbose_name='訂單UUID')
-    Consumer = models.CharField(max_length=255,verbose_name='買家名稱')
-    Provider = models.CharField(max_length=255,verbose_name='賣家名稱')
+    Order_ID = models.CharField(max_length=255, verbose_name='訂單UUID')
+    Consumer = models.CharField(max_length=255, verbose_name='買家名稱')
+    Provider = models.CharField(max_length=255, verbose_name='賣家名稱')
     Order = models.JSONField(verbose_name='訂單資訊')
     '''
     order: {
         '商品id': { amount: 數量, price: 單項金額 },
     }
     '''
-    Totalprice = models.CharField(max_length=255,verbose_name='訂單總價格')
-    Comment = models.CharField(max_length=255,verbose_name='買家留言')
+    Totalprice = models.CharField(max_length=255, verbose_name='訂單總價格')
+    Comment = models.CharField(max_length=255, verbose_name='買家留言',blank=True)
     Options = models.JSONField(verbose_name='買家提供的地點,時間')
     '''
     options: { //買家提供的時段
@@ -38,7 +39,7 @@ class Order(models.Model):
         end : ""
     }
     '''
-    Progress = models.CharField(max_length=10,verbose_name='訂單進度')
+    Progress = models.IntegerField(verbose_name='訂單進度')
     """
     訂單進度
     不同身分在不同 progress 能做的操作不一樣

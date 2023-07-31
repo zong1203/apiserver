@@ -63,3 +63,23 @@ def search_by_commodity_raw(**kwargs):
 
 def get_commodity_by_account(account):
     return Commodity.objects.filter(Account=account,Launched=True).values()
+
+def get_price_by_id(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return int(c[0].Price)
+
+def get_amount_by_id(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return int(c[0].Amount)
+
+def reduce_commodity_amount(commodity_id,borrowed_amount):
+    c = Commodity.objects.filter(id=commodity_id)
+    if int(c[0].Amount) < borrowed_amount:
+        return "false"
+    amount = int(c[0].Amount) - borrowed_amount
+    Commodity.objects.filter(id=commodity_id).update(Amount=str(amount),BorrowedAmount=borrowed_amount)
+    return "success"
+
+def get_provider_by_commodity_id(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return c[0].Account

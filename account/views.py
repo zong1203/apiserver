@@ -16,6 +16,8 @@ from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render
 
 import json,jwt,datetime,hashlib
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -234,10 +236,17 @@ def get_client_ip(request):
 def log(request):
     # if get_client_ip(request=request) != "192.168.0.1":
     #     return render(request, 'log.html', {'sorry': "Sorry,you're not admin"})
-    with open("server.log","r") as f:
-        text = f.readlines()
-        text = [i.rstrip() for i in text]
-        return render(request, 'log.html', {'text': text})
+    # with open("server.log","r") as f:
+    #     text = f.readlines()
+    #     text = [i.rstrip() for i in text]
+    #     return render(request, 'log.html', {'text': text})
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)("123", {
+        "type": "chat.message",
+        "sender": "system",
+        "message": "Hello there!",
+    })
+    return JsonResponse(status=200,data={"success":True})
 
 def get_date():
     today = datetime.date.today()
@@ -253,7 +262,7 @@ def auth(request):
     d1 = datetime.date((payload["year"]), (payload["month"]), (payload["date"]))
     d2 = datetime.date(year, month, date)
     if abs(d2-d1).days > 10:
-        return False,payload["username"],{"success":False,"message":"json time limit exceeded"}
+        return False,payload["username"],{"success":False,"message":"jwt time limit exceeded"}
     return True,payload["username"],None
 #======================================================================================================
 #chathistory

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)kxgf5md*r)$97)a8wqjkga86roqc(g3209unlb+2)$3yjn6ec
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['125.229.111.81']
+ALLOWED_HOSTS = ['125.229.111.81','192.168.1.14','127.0.0.1']
 
 
 # Application definition
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'chat',
     'order',
 ]
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'none'
 
 SWAGGER_SETTINGS = {
     'SUPPORTED_SUBMIT_METHODS':[],

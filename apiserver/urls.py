@@ -19,6 +19,7 @@ from rest_framework.routers import DefaultRouter
 from account import views as account_views
 from commodity import views as commodity_views
 from cart import views as cart_views
+from order import views as order_views
 # from chat.views import home_page
 
 from rest_framework import permissions
@@ -42,6 +43,8 @@ router = DefaultRouter()
 router.register('userfile', account_views.UserfileViewSet)
 router.register('commodity', commodity_views.CommodityViewSet)
 router.register('cart', cart_views.CartViewSet)
+router.register('order', order_views.OrderViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
