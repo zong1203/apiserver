@@ -77,9 +77,14 @@ def reduce_commodity_amount(commodity_id,borrowed_amount):
     if int(c[0].Amount) < borrowed_amount:
         return "false"
     amount = int(c[0].Amount) - borrowed_amount
-    Commodity.objects.filter(id=commodity_id).update(Amount=str(amount),BorrowedAmount=borrowed_amount)
+    borrowed_amount = int(c[0].BorrowedAmount) + borrowed_amount
+    Commodity.objects.filter(id=commodity_id).update(Amount=str(amount),BorrowedAmount=str(borrowed_amount))
     return "success"
 
 def get_provider_by_commodity_id(commodity_id):
     c = Commodity.objects.filter(id=commodity_id)
     return c[0].Account
+
+def get_name_and_img_by_id(commodity_id):
+    c = Commodity.objects.filter(id=commodity_id)
+    return c[0].Name,c[0].Img1

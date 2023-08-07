@@ -54,3 +54,13 @@ def account_search(account):
     if not result:
         return "ok"
     return "帳號已經被註冊"
+
+def get_primary_info_by_name(username):
+    result = Userfile.objects.filter(Account=username)
+    data = {
+        "account": result[0].Account,
+        "nickname": result[0].Name,
+        "mail": result[0].Email,
+        "phone":result[0].Phonenumber
+    }
+    return data
