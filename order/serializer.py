@@ -6,7 +6,7 @@ from commodity.models import get_name_and_img_by_id
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ("Provider","Consumer","Progress","Order","Totalprice","Comment","Options","Using_Message","Selected_Option","Actual")
+        fields = ("id","Provider","Consumer","Progress","Order","Totalprice","Comment","Options","Using_Message","Selected_Option","Actual")
 
     def to_representation(self, value):
         data = super().to_representation(value)

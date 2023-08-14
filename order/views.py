@@ -10,7 +10,7 @@ from account.views import auth
 from account.models import get_primary_info_by_name
 from commodity.models import get_price_by_id, get_launch_state_by_ID, get_amount_by_id, reduce_commodity_amount, get_provider_by_commodity_id
 from order.serializer import OrderSerializer
-from order.models import Order
+from order.models import Order,get_order_overview
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -47,6 +47,18 @@ class OrderViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(auto_schema=None)
     def partial_update(self, request):
         return JsonResponse({"success": False})
+
+    @action(detail=False, methods=['get'])
+    def overview(self, request):
+        state, account, state_message = auth(request)
+        if state == False:
+            return JsonResponse(status=400, data=state_message)
+        order_progress = int(request.query_params.get('progress', None))
+        order_status = request.query_params.get('status', None)
+        if not (order_status == "consumer" or order_status == "provider"):
+            return JsonResponse(status=400, data={"success": False,"message": "參數錯誤"})
+        orders = get_order_overview(order_progress,order_status,account)
+        return JsonResponse(status=200, data={"success": True,"orders": orders})
 
     @action(detail=False, methods=['get', 'post', 'put','delete'])
     def order_CRUD(self, request):
@@ -120,13 +132,13 @@ class OrderViewSet(viewsets.ModelViewSet):
                     Order.objects.filter(id=order_id).update(Progress=1,Selected_Option=body["selectedOption"])
                     return JsonResponse(status=200, data={"success": True})#到這邊為止是在剛下訂單的時候的確認訂單
                 if mode == '2':
-                    if account != order[0].Provider or account != order[0].Consumer:#從這邊開始是在剛下訂單的時候的取消訂單
+                    if not (account == order[0].Provider or account == order[0].Consumer):#從這邊開始是在剛下訂單的時候的取消訂單
                         return JsonResponse(status=400, data={"success": False,"message":"拒絕不符權限的操作"})
                     Order.objects.filter(id=order_id).update(Progress=-1)
                     return JsonResponse(status=200, data={"success": True})#到這邊為止是在剛下訂單的時候的取消訂單
             if order[0].Progress == 1:
                 if mode == '2':
-                    if account != order[0].Provider or account != order[0].Consumer:#從這邊開始是在交貨前的取消訂單
+                    if not (account == order[0].Provider or account == order[0].Consumer):#從這邊開始是在交貨前的取消訂單
                         return JsonResponse(status=400, data={"success": False,"message":"拒絕不符權限的操作"})
                     Order.objects.filter(id=order_id).update(Progress=-1)
                     return JsonResponse(status=200, data={"success": True})#到這邊為止是在交貨前的取消訂單

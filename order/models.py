@@ -1,5 +1,5 @@
 from django.db import models
-
+from commodity.models import get_first_picture,get_name_and_img_by_id
 # Create your models here.
 
 
@@ -57,3 +57,28 @@ class Order(models.Model):
 
     class Meta:
         db_table = "Order"
+
+def get_order_overview(progress,status,account):
+    if status == "consumer":
+        order = Order.objects.filter(Progress=progress,Consumer=account)
+    if status == "provider":
+        order = Order.objects.filter(Progress=progress,Provider=account)
+    list = []
+    for i in order:
+        temp = {}
+        temp["order_id"] = i.id
+        if status == "consumer":
+            temp["nickname"] = i.Provider
+        if status == "provider":
+            temp["nickname"] = i.Consumer
+        for j in i.Order:
+            temp["cover"] = get_first_picture(int(j))
+            break
+        temp["totalprice"] = i.Totalprice
+        temp2 = []
+        for j in i.Order:
+            name,img = get_name_and_img_by_id(j)
+            temp2.append(name)
+        temp["items"] = temp2
+        list.append(temp)
+    return list

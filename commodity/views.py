@@ -61,8 +61,10 @@ class CommodityViewSet(viewsets.ModelViewSet):
         if not commodity_id:
             return JsonResponse(status=400, data={"success": False, "commodity": []})
         commodity = search_by_commodity_raw(commodity_id=commodity_id)
+        if not commodity:
+            return JsonResponse(status=400, data={"success": False, "message": "can't find commodity with this id"})
         serializer = CommoditySerializer(commodity, many=True)
-        if not serializer.data[0]["Launched"]:
+        if not serializer.data[0]["launched"]:
             return JsonResponse(status=400, data={"success": False, "commodity": []})
         return Response(status=200, data={"success": True, "commodity": serializer.data[0]})
 
@@ -124,7 +126,7 @@ class CommodityViewSet(viewsets.ModelViewSet):
         launched = []
         unlaunched = []
         for i in serializer.data:
-            if i["Launched"]:
+            if i["launched"]:
                 launched.append(i)
             else:
                 unlaunched.append(i)
@@ -277,10 +279,10 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 body = json.loads(body_unicode)
             except:
                 return JsonResponse(status=400, data={"fail": "please use json"})
-            if 'name' not in body or 'launched' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body or 'image' not in body:
+            if 'name' not in body or 'launched' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body or 'imgs' not in body:
                 return JsonResponse(status=400, data={"success": False, "message": "缺少必要資料"})
             img = ["", "", "", "", ""]
-            for i, j in enumerate(body["image"]):
+            for i, j in enumerate(body["imgs"]):
                 img[i] = upload_image(j)
             Commodity.objects.create(
                 Launched=body["launched"], Img1=img[0], Img2=img[1], Img3=img[2], Img4=img[3],
@@ -302,21 +304,26 @@ class CommodityViewSet(viewsets.ModelViewSet):
                 body = json.loads(body_unicode)
             except:
                 return JsonResponse(status=400, data={"fail": "please use json"})
-            if 'name' not in body or 'launched' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body:
+            for i in body:
+                print(i)
+            if 'name' not in body or 'description' not in body or 'price' not in body or 'amount' not in body or 'position' not in body:
                 return JsonResponse(status=400, data={"success": False, "message": "缺少必要資料"})
             img = [commodity[0].Img1, commodity[0].Img2,
                    commodity[0].Img3, commodity[0].Img4, commodity[0].Img5]
             for i in img:
-                if (i not in body["remain_image"]) and i != "":
+                j = "image/get/?picture_name=" + i
+                if (j not in body["remain_imgs"]) and i != "":
                     os.remove(f'./picture/picture/{i}')
-            img = body["remain_image"]
-            for i in body["image"]:
+            img = []
+            for i in body["remain_imgs"]:
+                img.append(i.replace("image/get/?picture_name=",""))
+            for i in body["imgs"]:
                 img.append(upload_image(i))
             while len(img) < 5:
                 img.append("")
             Commodity.objects.filter(id=int(commodity_id)).update(
-                Launched=body["launched"], Img1=img[0], Img2=img[1], Img3=img[2], Img4=img[3],
-                Img5=img[4], Name=body["name"], Description=body["description"], Price=body["price"],
+                Img1=img[0], Img2=img[1], Img3=img[2], Img4=img[3],Img5=img[4],
+                Name=body["name"], Description=body["description"], Price=body["price"],
                 Amount=body["amount"], Position=body["position"], Account=account
             )
             return JsonResponse(status=200, data={"success": True})

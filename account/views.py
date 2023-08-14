@@ -91,7 +91,7 @@ class UserfileViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def verify_token(self, request):
         state, account, message = auth(request)
-        if state:
+        if not state:
             return JsonResponse(status=400,data={"success":state})
         return JsonResponse(status=200,data={"success":state})
     

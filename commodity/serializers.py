@@ -12,7 +12,21 @@ class CommoditySerializer(serializers.ModelSerializer):
         for i in (data["Img1"],data["Img2"],data["Img3"],data["Img4"],data["Img5"]):
             if i:
                 image.append("image/get/?picture_name="+i)
-        data["Image"] = image
+        data["imgs"] = image
         for i in range(1,6):
             data.pop(f"Img{i}")
+        data["provider"] = data["Account"]
+        data.pop("Account")
+        data["name"] = data["Name"]
+        data.pop("Name")
+        data["description"] = data["Description"]
+        data.pop("Description")
+        data["price"] = data["Price"]
+        data.pop("Price")
+        data["amount"] = data["Amount"]
+        data.pop("Amount")
+        data["position"] = data["Position"]
+        data.pop("Position")
+        data["launched"] = data["Launched"]
+        data.pop("Launched")
         return data
